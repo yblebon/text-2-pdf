@@ -1,212 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Text to PDF Converter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  body {
-    background:#f4f4f4;
-    font-family:Arial,Helvetica,sans-serif;
-    margin:0;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    min-height:100vh;
-    padding-top:40px;
-  }
-  .container{
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 6px 18px rgba(0,0,0,.12);
-    width:92%;
-    max-width:720px;
-  }
-  h1{margin:0 0 12px;font-size:20px;text-align:center}
-  .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-  label{width:100%;font-size:13px;color:#333;margin-bottom:4px}
-  input[type="text"], input[type="number"], textarea{
-    width:100%;
-    box-sizing:border-box;
-    padding:10px;border:1px solid #d0d7de;border-radius:6px;
-    font-size:14px;
-  }
-  textarea{min-height:160px;resize:vertical}
-  .two{flex:1 1 48%}
-  button{
-    width:100%;
-    padding:12px;border:0;border-radius:8px;background:#007bff;color:#fff;font-size:16px;
-    cursor:pointer;margin-top:8px;
-  }
-  button:hover{background:#005ecb}
-  @media(max-width:480px){ .two{flex-basis:100%} }
-  .meta-grid{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-  .meta-grid .item{flex:1 1 48%}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:       #1a1917;
+  --ink2:      #6b6860;
+  --ink3:      #a8a49d;
+  --paper:     #faf9f7;
+  --surface:   #f3f1ed;
+  --border:    #e2dfd8;
+  --accent:    #2d5be3;
+  --accent-bg: #eef2fc;
+  --danger:    #c44;
+  --radius:    6px;
+  --mono:      'DM Mono', monospace;
+  --sans:      'DM Sans', sans-serif;
+  --serif:     'Instrument Serif', serif;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 18px 28px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+header h1 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+header span {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  min-height: 0;
+}
+
+/* ── LEFT PANEL ── */
+.controls {
+  background: var(--paper);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 22px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink2);
+  letter-spacing: 0.01em;
+}
+.field input,
+.field textarea {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px 11px;
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+  width: 100%;
+}
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.field textarea {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+.error-msg {
+  font-size: 11.5px;
+  color: var(--danger);
+  margin-top: 3px;
+  display: none;
+}
+.error-msg.visible { display: block; }
+
+.btn-group { display: flex; flex-direction: column; gap: 8px; }
+
+button {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  padding: 11px 16px;
+  transition: background .15s, opacity .15s, transform .1s;
+}
+button:active { transform: translateY(1px); }
+
+#previewBtn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink2);
+}
+#previewBtn:hover { background: var(--border); color: var(--ink); }
+
+#generatePdf {
+  background: var(--accent);
+  color: #fff;
+}
+#generatePdf:hover { background: #234bc4; }
+#generatePdf:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── RIGHT PANEL ── */
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ccc9c0;
+}
+
+.preview-toolbar {
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.preview-toolbar span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink3);
+  letter-spacing: 0.06em;
+}
+.preview-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  display: inline-block;
+  margin-right: 6px;
+  transition: background .3s;
+}
+.preview-dot.live { background: #3c9e57; }
+
+.preview-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.pdf-page-wrap {
+  width: 100%;
+  max-width: 680px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,.18);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.pdf-page-wrap canvas { display: block; width: 100%; }
+
+.preview-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #8a8680;
+  padding: 80px 0;
+}
+.preview-empty svg { opacity: .35; }
+.preview-empty p { font-size: 13px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+@media (max-width: 760px) {
+  .workspace { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .preview-panel { min-height: 400px; }
+}
 </style>
 </head>
 <body>
-<div class="container" role="main">
-  <h1>Text to PDF Converter</h1>
 
-  <div class="meta-grid">
-    <div class="item">
-      <label for="title">Title (filename)</label>
-      <input id="title" type="text" placeholder="Optional filename">
-    </div>
-    <div class="item">
-      <label for="author">Author</label>
-      <input id="author" type="text" placeholder="Optional author (footer)">
-    </div>
-    <div class="item">
-      <label for="subject">Subject</label>
-      <input id="subject" type="text" placeholder="Optional subject (top)">
-    </div>
-    <div class="item">
-      <label for="keywords">Keywords</label>
-      <input id="keywords" type="text" placeholder="Optional keywords">
-    </div>
-  </div>
+<header>
+  <h1>Text to PDF</h1>
+  <span>Converter</span>
+</header>
 
-  <label for="textInput">Content</label>
-  <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+<div class="workspace">
 
-  <div class="row">
-    <div class="two">
-      <label for="leftMargin">Left margin (mm)</label>
-      <input id="leftMargin" type="number" value="20" min="0">
-    </div>
-    <div class="two">
-      <label for="rightMargin">Right margin (mm)</label>
-      <input id="rightMargin" type="number" value="20" min="0">
-    </div>
-    <div class="two">
-      <label for="topMargin">Top margin (mm)</label>
-      <input id="topMargin" type="number" value="30" min="0">
-    </div>
-    <div class="two">
-      <label for="fontSize">Font size (pt)</label>
-      <input id="fontSize" type="number" value="12" min="6" max="24">
-    </div>
-  </div>
+  <!-- ── CONTROLS ── -->
+  <aside class="controls">
 
-  <button id="generatePdf">Generate PDF</button>
+    <div>
+      <div class="section-label">Document metadata</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="field">
+          <label for="title">Filename</label>
+          <input id="title" type="text" placeholder="my-document">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="author">Author</label>
+            <input id="author" type="text" placeholder="Footer text">
+          </div>
+          <div class="field">
+            <label for="keywords">Keywords</label>
+            <input id="keywords" type="text" placeholder="tag1, tag2">
+          </div>
+        </div>
+        <div class="field">
+          <label for="subject">Subject / Heading</label>
+          <input id="subject" type="text" placeholder="Large heading at top of page">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">Content</div>
+      <div class="field">
+        <textarea id="textInput" placeholder="Enter your text here…"></textarea>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">Layout</div>
+      <div class="grid-2">
+        <div class="field">
+          <label for="leftMargin">Left margin (mm)</label>
+          <input id="leftMargin" type="number" value="20" min="0" max="100">
+        </div>
+        <div class="field">
+          <label for="rightMargin">Right margin (mm)</label>
+          <input id="rightMargin" type="number" value="20" min="0" max="100">
+        </div>
+        <div class="field">
+          <label for="topMargin">Top margin (mm)</label>
+          <input id="topMargin" type="number" value="30" min="0" max="100">
+        </div>
+        <div class="field">
+          <label for="fontSize">Font size (pt)</label>
+          <input id="fontSize" type="number" value="12" min="6" max="24">
+        </div>
+      </div>
+      <div id="marginError" class="error-msg">Margins too large for page width (210 mm).</div>
+    </div>
+
+    <div class="btn-group">
+      <button id="previewBtn" onclick="runPreview()">↺ Refresh preview</button>
+      <button id="generatePdf" onclick="generate(true)">↓ Download PDF</button>
+    </div>
+
+  </aside>
+
+  <!-- ── PREVIEW ── -->
+  <section class="preview-panel">
+    <div class="preview-toolbar">
+      <span><span class="preview-dot" id="liveDot"></span>Live preview</span>
+      <span id="pageCount"></span>
+    </div>
+    <div class="preview-scroll" id="previewScroll">
+      <div class="preview-empty" id="emptyState">
+        <svg width="48" height="60" viewBox="0 0 48 60" fill="none">
+          <rect x="4" y="4" width="36" height="48" rx="3" stroke="#8a8680" stroke-width="1.5"/>
+          <path d="M12 20h20M12 28h20M12 36h12" stroke="#8a8680" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M32 4v10h12" stroke="#8a8680" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p>Start typing to see a preview</p>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script>
-document.getElementById('generatePdf').addEventListener('click', () => {
+/* ── BUILD PDF ───────────────────────────────────────────────────── */
+function buildDoc() {
   const { jsPDF } = window.jspdf;
-  const title = document.getElementById('title').value.trim();
-  const author = document.getElementById('author').value.trim();
-  const subject = document.getElementById('subject').value.trim();
-  const keywords = document.getElementById('keywords').value.trim();
-  const text = document.getElementById('textInput').value || '';
-  const leftMargin = Number(document.getElementById('leftMargin').value) || 20;
-  const rightMargin = Number(document.getElementById('rightMargin').value) || 20;
-  const topMarginInput = Number(document.getElementById('topMargin').value) || 30;
-  const fontSize = Number(document.getElementById('fontSize').value) || 12;
+
+  const title      = document.getElementById('title').value.trim();
+  const author     = document.getElementById('author').value.trim();
+  const subject    = document.getElementById('subject').value.trim();
+  const keywords   = document.getElementById('keywords').value.trim();
+  const text       = document.getElementById('textInput').value || '';
+  const leftMargin = Math.max(0, Number(document.getElementById('leftMargin').value)  || 20);
+  const rightMargin= Math.max(0, Number(document.getElementById('rightMargin').value) || 20);
+  const topMarginInput = Math.max(0, Number(document.getElementById('topMargin').value) || 30);
+  const fontSize   = Math.min(24, Math.max(6, Number(document.getElementById('fontSize').value) || 12));
 
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
-  const props = {};
-  if (title) props.title = title;
-  if (subject) props.subject = subject;
-  if (keywords) props.keywords = keywords;
-  if (author) props.author = author;
-  if (Object.keys(props).length) doc.setProperties(props);
+  const pageWidth  = doc.internal.pageSize.getWidth();   // 210mm
+  const pageHeight = doc.internal.pageSize.getHeight();  // 297mm
 
-  doc.setFont('helvetica');
-  doc.setFontSize(fontSize);
-  doc.setTextColor(0,0,0);
+  // ── FIX: guard against margins that exceed page width ──────────
+  const errorEl = document.getElementById('marginError');
+  if (leftMargin + rightMargin >= pageWidth - 10) {
+    errorEl.classList.add('visible');
+    return null;
+  }
+  errorEl.classList.remove('visible');
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const usableWidth = pageWidth - leftMargin - rightMargin;
-  const lineHeight = (fontSize * 1.15) * 0.352777778; // pt->mm
+  const usableWidth  = pageWidth - leftMargin - rightMargin;
+  const lineHeight   = (fontSize * 1.15) * 0.352777778;    // pt → mm
 
-  // Subject (top) sizing and spacing — constrained to same usableWidth
-  const subjectFontSize = subject ? Math.min(26, fontSize + 10) : 0;
+  // ── FIX: only apply extraGap when a subject exists ─────────────
+  const subjectFontSize  = subject ? Math.min(26, fontSize + 10) : 0;
   const subjectLineHeight = subjectFontSize ? (subjectFontSize * 1.15) * 0.352777778 : 0;
-  const subjectLines = subject ? doc.splitTextToSize(subject, usableWidth) : [];
-  const subjectHeight = subjectLines.length * subjectLineHeight;
-  // const extraGap = subject ? 14 : 0; // increased gap between subject and body in mm
-  const extraGap = 20;
+  const subjectLines     = subject ? doc.splitTextToSize(subject, usableWidth) : [];
+  const subjectHeight    = subjectLines.length * subjectLineHeight;
+  const extraGap         = subject ? 20 : 0;               // ← BUG FIX
 
-  // Top margin includes user top margin plus subject block height and extra gap
   const topMargin = topMarginInput + subjectHeight + extraGap;
 
-  // split body text into lines using same usableWidth
-  const lines = doc.splitTextToSize(text || '', usableWidth);
-
+  const lines        = doc.splitTextToSize(text, usableWidth);
   const bottomMargin = 10;
-  const footerYoffset = 8;
+  const footerOffset = 8;
 
-  function drawSubjectOnPage() {
+  // ── FIX: explicit font family throughout ───────────────────────
+  function drawSubject() {
     if (!subject) return;
     doc.setFontSize(subjectFontSize);
-    doc.setFont(undefined, 'bold');
-    doc.setTextColor(0,0,0);
-    // start y inside the user's topMargin area
-    let y = topMarginInput + (subjectLineHeight * 0.8);
-    for (let i = 0; i < subjectLines.length; i++) {
-      const line = subjectLines[i];
-      // x aligned so subject is centered within the usableWidth (honoring left/right margins)
-      const textWidth = doc.getTextWidth(line);
-      //const x = leftMargin + (usableWidth - textWidth) / 2;
-      const x = leftMargin;
-
-      doc.text(line, x, y, { maxWidth: usableWidth });
+    doc.setFont('helvetica', 'bold');                       // ← BUG FIX
+    doc.setTextColor(0, 0, 0);
+    let y = topMarginInput + subjectLineHeight * 0.8;
+    for (const line of subjectLines) {
+      doc.text(line, leftMargin, y);                        // maxWidth removed (redundant after splitTextToSize)
       y += subjectLineHeight;
     }
     doc.setFontSize(fontSize);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');                     // ← BUG FIX
   }
 
-  function drawFooter() {
-    if (!author) return;
-    doc.setFontSize(Math.max(9, Math.min(11, fontSize - 1)));
-    doc.setTextColor(120,120,120);
-    const x = leftMargin;
-    const y = pageHeight - footerYoffset;
-    doc.text(author, x, y);
-    doc.setTextColor(0,0,0);
+  // ── FIX: footer font size can't exceed body size ────────────────
+  function drawFooter(pageNum, total) {
+    const fSize = Math.min(fontSize, Math.max(6, fontSize - 1)); // ← BUG FIX
+    doc.setFontSize(fSize);
+    doc.setTextColor(120, 120, 120);
+    const y = pageHeight - footerOffset;
+    if (author) doc.text(author, leftMargin, y);
+    const pageLabel = `${pageNum} / ${total}`;
+    const labelW = doc.getTextWidth(pageLabel);
+    doc.text(pageLabel, pageWidth - rightMargin - labelW, y);
+    doc.setTextColor(0, 0, 0);
     doc.setFontSize(fontSize);
   }
 
-  // draw content with pagination, ensuring subject space reserved on first page
-  let lineIndex = 0;
-  let firstPage = true;
+  // ── PDF metadata ────────────────────────────────────────────────
+  const props = {};
+  if (title)    props.title    = title;
+  if (subject)  props.subject  = subject;
+  if (keywords) props.keywords = keywords;
+  if (author)   props.author   = author;
+  if (Object.keys(props).length) doc.setProperties(props);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(fontSize);
+  doc.setTextColor(0, 0, 0);
+
+  // ── Pre-calculate total pages ───────────────────────────────────
+  function calcTotalPages() {
+    let count = 1, idx = 0, first = true;
+    while (idx < lines.length) {
+      const top = first ? topMargin : topMarginInput;
+      let y = top;
+      while (idx < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
+        y += lineHeight; idx++;
+      }
+      if (idx < lines.length) { count++; first = false; }
+      else break;
+    }
+    if (lines.length === 0) count = 1;
+    return count;
+  }
+
+  const totalPages = calcTotalPages();
+  let lineIndex = 0, pageNum = 1, firstPage = true;
 
   while (lineIndex < lines.length) {
-    if (firstPage) {
-      drawSubjectOnPage();
-    }
-
+    if (firstPage) drawSubject();
     const currentTop = firstPage ? topMargin : topMarginInput;
     let y = currentTop;
-
-    while (lineIndex < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerYoffset)) {
+    while (lineIndex < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
       doc.text(lines[lineIndex], leftMargin, y);
       y += lineHeight;
       lineIndex++;
     }
-
-    drawFooter();
-
+    drawFooter(pageNum, totalPages);
     if (lineIndex < lines.length) {
       doc.addPage();
+      pageNum++;
       firstPage = false;
-    } else {
-      break;
-    }
+    } else break;
   }
 
   if (lines.length === 0) {
-    drawSubjectOnPage();
-    drawFooter();
+    drawSubject();
+    drawFooter(1, 1);
   }
 
-  doc.save((title ? title.replace(/\s+/g,'_') : 'converted') + '.pdf');
+  return doc;
+}
+
+/* ── GENERATE & DOWNLOAD ─────────────────────────────────────────── */
+function generate(download) {
+  const btn = document.getElementById('generatePdf');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+  // yield to browser to show the disabled state
+  setTimeout(() => {
+    try {
+      const doc = buildDoc();
+      if (!doc) return;
+      if (download) {
+        const rawTitle = document.getElementById('title').value.trim();
+        // ── FIX: sanitize illegal filename characters ─────────────
+        const safe = rawTitle
+          .replace(/[\\/:*?"<>|]/g, '')
+          .replace(/\s+/g, '_')
+          .trim() || 'converted';
+        doc.save(safe + '.pdf');
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '↓ Download PDF';
+    }
+  }, 20);
+}
+
+/* ── LIVE PREVIEW ────────────────────────────────────────────────── */
+let previewDebounce = null;
+
+function runPreview() {
+  clearTimeout(previewDebounce);
+  const dot = document.getElementById('liveDot');
+  dot.classList.remove('live');
+
+  previewDebounce = setTimeout(() => {
+    const doc = buildDoc();
+    if (!doc) return;
+
+    const scroll = document.getElementById('previewScroll');
+    const empty  = document.getElementById('emptyState');
+    const pageCountEl = document.getElementById('pageCount');
+
+    const data   = doc.output('arraybuffer');
+    const numPagesRendered = doc.internal.getNumberOfPages();
+
+    pageCountEl.textContent = numPagesRendered + (numPagesRendered === 1 ? ' page' : ' pages');
+
+    // Remove old pages
+    scroll.querySelectorAll('.pdf-page-wrap').forEach(el => el.remove());
+    empty.style.display = 'none';
+
+    renderPagesFromBuffer(data, numPagesRendered, scroll);
+    dot.classList.add('live');
+  }, 350);
+}
+
+async function renderPagesFromBuffer(buffer, numPages, scroll) {
+  if (!window.pdfjsLib) return;
+  const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+  for (let i = 1; i <= pdfDoc.numPages; i++) {
+    const page = await pdfDoc.getPage(i);
+    const viewport = page.getViewport({ scale: 2 });
+    const canvas = document.createElement('canvas');
+    canvas.width  = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    const wrap = document.createElement('div');
+    wrap.className = 'pdf-page-wrap';
+    wrap.appendChild(canvas);
+    scroll.appendChild(wrap);
+  }
+}
+
+/* ── DEBOUNCED AUTO-PREVIEW ──────────────────────────────────────── */
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', runPreview);
 });
+
+/* ── LOAD PDF.JS FOR RENDERING ───────────────────────────────────── */
+(function loadPdfJs() {
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  s.onload = () => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    runPreview();
+  };
+  document.head.appendChild(s);
+})();
 </script>
+</body>
+</html>

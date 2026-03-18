@@ -20,8 +20,11 @@
   --accent:    #2d5be3;
   --accent-bg: #eef2fc;
   --danger:    #c44;
+  --danger-bg: #fdf0f0;
+  --danger-bd: #f5c6c6;
   --success:   #2a7a48;
   --success-bg:#eaf5ef;
+  --success-bd:#b7ddc5;
   --radius:    6px;
   --mono:      'DM Mono', monospace;
   --sans:      'DM Sans', sans-serif;
@@ -46,25 +49,13 @@ header {
   gap: 12px;
   flex-shrink: 0;
 }
-header h1 {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: -0.01em;
-}
-header span {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--ink3);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
+header h1 { font-family: var(--serif); font-size: 22px; font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
+header span { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; }
 
 .workspace {
   flex: 1;
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 390px 1fr;
   min-height: 0;
   height: calc(100vh - 61px);
 }
@@ -74,10 +65,10 @@ header span {
   background: var(--paper);
   border-right: 1px solid var(--border);
   overflow-y: auto;
-  padding: 22px 22px 32px;
+  padding: 22px 22px 40px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
 }
 
 .section-label {
@@ -94,7 +85,7 @@ header span {
   align-items: center;
   justify-content: space-between;
 }
-.section-label .toggle-btn {
+.toggle-btn {
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 500;
@@ -104,17 +95,13 @@ header span {
   cursor: pointer;
   padding: 0;
   letter-spacing: 0.06em;
-  transition: color .15s;
 }
-.section-label .toggle-btn:hover { color: var(--ink2); transform: none; }
+.toggle-btn:hover { color: var(--ink2); transform: none !important; }
 
 .field { display: flex; flex-direction: column; gap: 5px; }
-.field label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink2);
-  letter-spacing: 0.01em;
-}
+.field label { font-size: 12px; font-weight: 500; color: var(--ink2); letter-spacing: 0.01em; }
+.hint { font-weight: 400; color: var(--ink3); font-size: 11px; margin-left: 4px; }
+
 .field input,
 .field textarea {
   font-family: var(--sans);
@@ -128,48 +115,30 @@ header span {
   outline: none;
   width: 100%;
 }
-.field input:focus,
-.field textarea:focus {
+.field input:focus, .field textarea:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
-.field textarea {
-  min-height: 140px;
-  resize: vertical;
-  line-height: 1.55;
-}
+.field input.is-error { border-color: var(--danger); box-shadow: 0 0 0 3px var(--danger-bg); }
+.field textarea { min-height: 130px; resize: vertical; line-height: 1.55; }
+
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
 input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
-.error-msg { font-size: 11.5px; color: var(--danger); margin-top: 4px; display: none; }
-.error-msg.visible { display: block; }
-
-/* ── TEMPLATE LIST ── */
-.tpl-status {
-  font-family: var(--mono);
-  font-size: 11px;
-  padding: 8px 11px;
-  border-radius: var(--radius);
+.msg {
+  font-size: 11.5px;
+  padding: 0;
+  margin-top: 4px;
   display: none;
-  align-items: center;
-  gap: 8px;
 }
-.tpl-status.loading {
-  display: flex;
-  color: var(--ink3);
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-.tpl-status.error {
-  display: flex;
-  color: var(--danger);
-  background: #fdf0f0;
-  border: 1px solid #f5c6c6;
-}
+.msg.visible { display: block; }
+.msg.error   { color: var(--danger); }
+.msg.success { color: var(--success); }
 
-/* spinner */
+/* ── SPINNER ── */
 .spinner {
   width: 12px; height: 12px;
   border: 1.5px solid var(--border);
@@ -180,27 +149,42 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.tpl-list { display: flex; flex-direction: column; gap: 6px; }
+/* ── STATUS PILLS ── */
+.status-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 8px 11px;
+  border-radius: var(--radius);
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.status-pill.loading { display: flex; color: var(--ink3); background: var(--surface); border: 1px solid var(--border); }
+.status-pill.error   { display: flex; color: var(--danger); background: var(--danger-bg); border: 1px solid var(--danger-bd); }
+.status-pill.success { display: flex; color: var(--success); background: var(--success-bg); border: 1px solid var(--success-bd); }
 
-.tpl-card {
+/* ── CARD LIST (templates & saved docs share this) ── */
+.card-list { display: flex; flex-direction: column; gap: 6px; }
+
+.item-card {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 9px 11px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  cursor: pointer;
   transition: border-color .15s, background .15s;
-  text-align: left;
   width: 100%;
   font-family: var(--sans);
+  text-align: left;
 }
-.tpl-card:hover  { border-color: var(--accent); background: var(--accent-bg); }
-.tpl-card.active { border-color: var(--accent); background: var(--accent-bg); }
-.tpl-card:active { transform: none; }
+.item-card.clickable { cursor: pointer; }
+.item-card.clickable:hover  { border-color: var(--accent); background: var(--accent-bg); }
+.item-card.active           { border-color: var(--accent); background: var(--accent-bg); }
+.item-card:active           { transform: none; }
 
-.tpl-card-icon {
+.item-icon {
   flex-shrink: 0;
   width: 28px; height: 28px;
   background: var(--paper);
@@ -210,8 +194,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   align-items: center;
   justify-content: center;
 }
-.tpl-card-body { flex: 1; min-width: 0; }
-.tpl-card-name {
+.item-body { flex: 1; min-width: 0; }
+.item-name {
   font-size: 13px;
   font-weight: 500;
   color: var(--ink);
@@ -219,16 +203,16 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.tpl-card-desc {
+.item-meta {
   font-size: 11px;
   color: var(--ink3);
   font-family: var(--mono);
-  margin-top: 2px;
+  margin-top: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.tpl-badge {
+.item-badge {
   flex-shrink: 0;
   font-family: var(--mono);
   font-size: 9.5px;
@@ -243,11 +227,76 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   opacity: 0;
   transition: opacity .2s;
 }
-.tpl-card.active .tpl-badge { opacity: 1; }
+.item-card.active .item-badge { opacity: 1; }
 
-/* ── BUTTONS ── */
+/* icon-only button used in saved doc rows */
+.icon-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+  color: var(--ink3);
+  font-size: 13px;
+  line-height: 1;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.icon-btn:hover { color: var(--ink2); border-color: var(--border); background: var(--paper); transform: none; }
+.icon-btn.danger:hover { color: var(--danger); border-color: var(--danger-bd); background: var(--danger-bg); }
+
+/* ── SAVE FORM (inline) ── */
+.save-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.save-row .field { flex: 1; }
+.save-row .save-btn {
+  flex-shrink: 0;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 9px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.save-row .save-btn:hover { background: var(--border); color: var(--ink); }
+
+/* overwrite confirm bar */
+.overwrite-bar {
+  background: #fff8ec;
+  border: 1px solid #f0d080;
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  font-size: 12px;
+  color: #7a5800;
+  display: none;
+  gap: 10px;
+  align-items: center;
+}
+.overwrite-bar.visible { display: flex; }
+.overwrite-bar span { flex: 1; }
+.overwrite-bar button {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 500;
+  border: 1px solid;
+}
+.overwrite-bar .ob-confirm { background: #7a5800; color: #fff; border-color: #7a5800; }
+.overwrite-bar .ob-cancel  { background: #fff8ec; color: #7a5800; border-color: #f0d080; }
+.overwrite-bar button:active { transform: none; }
+
+/* ── ACTION BUTTONS ── */
 .btn-group { display: flex; flex-direction: column; gap: 8px; }
-
 button {
   font-family: var(--sans);
   font-size: 13.5px;
@@ -260,24 +309,14 @@ button {
 }
 button:active { transform: translateY(1px); }
 
-#previewBtn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--ink2);
-}
+#previewBtn { background: var(--surface); border: 1px solid var(--border); color: var(--ink2); }
 #previewBtn:hover { background: var(--border); color: var(--ink); }
-
 #generatePdf { background: var(--accent); color: #fff; }
 #generatePdf:hover { background: #234bc4; }
 #generatePdf:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ── RIGHT PANEL ── */
-.preview-panel {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #ccc9c0;
-}
+.preview-panel { display: flex; flex-direction: column; overflow: hidden; background: #ccc9c0; }
 .preview-toolbar {
   background: var(--paper);
   border-bottom: 1px solid var(--border);
@@ -287,48 +326,13 @@ button:active { transform: translateY(1px); }
   justify-content: space-between;
   flex-shrink: 0;
 }
-.preview-toolbar span {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  color: var(--ink3);
-  letter-spacing: 0.06em;
-}
-.preview-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--border);
-  display: inline-block;
-  margin-right: 6px;
-  transition: background .3s;
-}
+.preview-toolbar span { font-family: var(--mono); font-size: 10.5px; color: var(--ink3); letter-spacing: 0.06em; }
+.preview-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); display: inline-block; margin-right: 6px; transition: background .3s; }
 .preview-dot.live { background: #3c9e57; }
-.preview-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 28px 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-}
-.pdf-page-wrap {
-  width: 100%;
-  max-width: 680px;
-  background: #fff;
-  box-shadow: 0 4px 24px rgba(0,0,0,.18);
-  border-radius: 2px;
-  overflow: hidden;
-}
+.preview-scroll { flex: 1; overflow-y: auto; padding: 28px 32px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.pdf-page-wrap { width: 100%; max-width: 680px; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,.18); border-radius: 2px; overflow: hidden; }
 .pdf-page-wrap canvas { display: block; width: 100%; }
-.preview-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #8a8680;
-  padding: 80px 0;
-}
+.preview-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #8a8680; padding: 80px 0; }
 .preview-empty svg { opacity: .35; }
 .preview-empty p { font-size: 13px; font-family: var(--mono); letter-spacing: 0.04em; }
 
@@ -346,25 +350,54 @@ button:active { transform: translateY(1px); }
 </header>
 
 <div class="workspace">
-
   <aside class="controls">
 
-    <!-- ══════════ TEMPLATES ══════════ -->
+    <!-- ══ TEMPLATES ══ -->
     <div>
       <div class="section-label">
         Templates
-        <button class="toggle-btn" id="tplToggle" onclick="toggleTpl()">hide</button>
+        <button class="toggle-btn" id="tplToggle" onclick="toggleSection('tplBody','tplToggle')">hide</button>
       </div>
       <div id="tplBody" style="display:flex;flex-direction:column;gap:8px">
-        <div class="tpl-status loading" id="tplStatus">
-          <span class="spinner"></span>
-          <span>Loading templates…</span>
+        <div class="status-pill loading" id="tplStatus">
+          <span class="spinner"></span><span>Loading templates…</span>
         </div>
-        <div class="tpl-list" id="tplList"></div>
+        <div class="card-list" id="tplList"></div>
       </div>
     </div>
 
-    <!-- ══════════ METADATA ══════════ -->
+    <!-- ══ SAVED DOCUMENTS ══ -->
+    <div>
+      <div class="section-label">
+        Saved documents
+        <button class="toggle-btn" id="savedToggle" onclick="toggleSection('savedBody','savedToggle')">hide</button>
+      </div>
+      <div id="savedBody" style="display:flex;flex-direction:column;gap:8px">
+
+        <div class="save-row">
+          <div class="field">
+            <label for="saveName">Document name</label>
+            <input id="saveName" type="text" placeholder="my-document" autocomplete="off" oninput="clearSaveError()">
+          </div>
+          <button class="save-btn" onclick="saveDocument()">Save</button>
+        </div>
+
+        <div class="overwrite-bar" id="overwriteBar">
+          <span id="overwriteMsg"></span>
+          <button class="ob-confirm" onclick="confirmOverwrite()">Overwrite</button>
+          <button class="ob-cancel"  onclick="cancelOverwrite()">Cancel</button>
+        </div>
+
+        <div class="msg error"   id="saveError"></div>
+        <div class="msg success" id="saveSuccess"></div>
+
+        <div class="card-list" id="savedList">
+          <div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ METADATA ══ -->
     <div>
       <div class="section-label">Document metadata</div>
       <div style="display:flex;flex-direction:column;gap:10px">
@@ -389,7 +422,7 @@ button:active { transform: translateY(1px); }
       </div>
     </div>
 
-    <!-- ══════════ CONTENT ══════════ -->
+    <!-- ══ CONTENT ══ -->
     <div>
       <div class="section-label">Content</div>
       <div class="field">
@@ -397,7 +430,7 @@ button:active { transform: translateY(1px); }
       </div>
     </div>
 
-    <!-- ══════════ LAYOUT ══════════ -->
+    <!-- ══ LAYOUT ══ -->
     <div>
       <div class="section-label">Layout</div>
       <div class="grid-2">
@@ -418,10 +451,10 @@ button:active { transform: translateY(1px); }
           <input id="fontSize" type="number" value="12" min="6" max="24">
         </div>
       </div>
-      <div id="marginError" class="error-msg">Margins too large for page width (210 mm).</div>
+      <div id="marginError" class="msg error">Margins too large for page width (210 mm).</div>
     </div>
 
-    <!-- ══════════ ACTIONS ══════════ -->
+    <!-- ══ ACTIONS ══ -->
     <div class="btn-group">
       <button id="previewBtn" onclick="runPreview()">↺ Refresh preview</button>
       <button id="generatePdf" onclick="generate()">↓ Download PDF</button>
@@ -429,7 +462,7 @@ button:active { transform: translateY(1px); }
 
   </aside>
 
-  <!-- ══════════ PREVIEW ══════════ -->
+  <!-- ══ PREVIEW ══ -->
   <section class="preview-panel">
     <div class="preview-toolbar">
       <span><span class="preview-dot" id="liveDot"></span>Live preview</span>
@@ -446,57 +479,29 @@ button:active { transform: translateY(1px); }
       </div>
     </div>
   </section>
-
 </div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   TEMPLATE LOADER
-   ═══════════════════════════════════════════════════════════════
-
-   The config URL must return JSON in one of two shapes:
-
-   A) Array of inline template objects (all fields applied directly):
-      [
-        { "name": "Cover Letter", "author": "Jane", "content": "…", … },
-        …
-      ]
-
-   B) Array of stubs with a remote URL to the full template:
-      [
-        { "name": "Cover Letter", "description": "formal tone", "url": "https://…/cover.json" },
-        …
-      ]
-
-   Shape A and B can be mixed in the same array.
-   Fields the template doesn't specify are left untouched in the form.
-
-   Supported fields:
-     name, title, author, subject, keywords,
-     content, leftMargin, rightMargin, topMargin, fontSize
+   CONSTANTS & HELPERS
    ═══════════════════════════════════════════════════════════════ */
-
 const TEMPLATES_URL = 'https://static-conf.vercel.app/go/text-2-pdf';
+const STORAGE_PREFIX = 'docs:';
 
-const FIELD_MAP = {
-  title:       'title',
-  author:      'author',
-  subject:     'subject',
-  keywords:    'keywords',
-  content:     'textInput',
-  leftMargin:  'leftMargin',
-  rightMargin: 'rightMargin',
-  topMargin:   'topMargin',
-  fontSize:    'fontSize',
+/* All form fields that templates and saved docs can populate.
+   DEFAULTS are applied first whenever switching a template,
+   so no leftover values bleed from a previous template.      */
+const FIELDS = {
+  title:       { id: 'title',       default: '' },
+  author:      { id: 'author',      default: '' },
+  subject:     { id: 'subject',     default: '' },
+  keywords:    { id: 'keywords',    default: '' },
+  content:     { id: 'textInput',   default: '' },
+  leftMargin:  { id: 'leftMargin',  default: '20' },
+  rightMargin: { id: 'rightMargin', default: '20' },
+  topMargin:   { id: 'topMargin',   default: '30' },
+  fontSize:    { id: 'fontSize',    default: '12' },
 };
-
-let tplOpen = true;
-
-function toggleTpl() {
-  tplOpen = !tplOpen;
-  document.getElementById('tplBody').style.display  = tplOpen ? 'flex' : 'none';
-  document.getElementById('tplToggle').textContent  = tplOpen ? 'hide' : 'show';
-}
 
 function esc(s) {
   return String(s ?? '')
@@ -504,10 +509,41 @@ function esc(s) {
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function setStatus(type, msg) {
+function readForm() {
+  const out = {};
+  for (const [key, cfg] of Object.entries(FIELDS)) {
+    out[key] = document.getElementById(cfg.id).value;
+  }
+  return out;
+}
+
+/* Reset every mapped field to its default, then overlay tpl values */
+function populateForm(tpl) {
+  for (const [key, cfg] of Object.entries(FIELDS)) {
+    const el = document.getElementById(cfg.id);
+    if (!el) continue;
+    el.value = (tpl[key] !== undefined && tpl[key] !== null)
+      ? tpl[key]
+      : cfg.default;
+  }
+}
+
+/* ── section collapse ── */
+function toggleSection(bodyId, btnId) {
+  const body = document.getElementById(bodyId);
+  const btn  = document.getElementById(btnId);
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'flex';
+  btn.textContent    = open ? 'show' : 'hide';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REMOTE TEMPLATES
+   ═══════════════════════════════════════════════════════════════ */
+function setTplStatus(type, msg) {
   const el = document.getElementById('tplStatus');
   if (!type) { el.style.display = 'none'; return; }
-  el.className = 'tpl-status ' + type;
+  el.className = 'status-pill ' + type;
   el.innerHTML = type === 'loading'
     ? `<span class="spinner"></span><span>${esc(msg)}</span>`
     : esc(msg);
@@ -515,94 +551,240 @@ function setStatus(type, msg) {
 }
 
 async function loadTemplates() {
-  setStatus('loading', 'Loading templates…');
+  setTplStatus('loading', 'Loading templates…');
   try {
     const res = await fetch(TEMPLATES_URL);
     if (!res.ok) throw new Error(`Server returned ${res.status}.`);
-
     const data = await res.json();
-
-    /* Normalise to an array */
     const list = Array.isArray(data) ? data
                : Array.isArray(data.templates) ? data.templates
                : null;
-
-    if (!list || list.length === 0) {
-      setStatus('error', 'No templates returned by the server.');
-      return;
-    }
-
-    setStatus(null);
-    renderList(list);
-
+    if (!list || list.length === 0) { setTplStatus('error', 'No templates returned.'); return; }
+    setTplStatus(null);
+    renderTplList(list);
   } catch (err) {
-    setStatus('error', `Could not load templates: ${err.message}`);
+    setTplStatus('error', `Could not load templates: ${err.message}`);
   }
 }
 
-function renderList(templates) {
+function renderTplList(templates) {
   const list = document.getElementById('tplList');
   list.innerHTML = '';
-
   templates.forEach(tpl => {
     const name = tpl.name || tpl.title || 'Untitled';
     const desc = tpl.description || tpl.subject || '';
-
     const btn = document.createElement('button');
-    btn.className = 'tpl-card';
+    btn.className = 'item-card clickable';
     btn.innerHTML = `
-      <div class="tpl-card-icon">
-        <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
-          <rect x="1" y="1" width="9" height="12" rx="1.5" stroke="var(--ink3)" stroke-width="1.2"/>
-          <path d="M3 5h5M3 7.5h5M3 10h3" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round"/>
-          <path d="M10 1v4h4" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <div class="item-icon">${docSvg()}</div>
+      <div class="item-body">
+        <div class="item-name">${esc(name)}</div>
+        ${desc ? `<div class="item-meta">${esc(desc)}</div>` : ''}
       </div>
-      <div class="tpl-card-body">
-        <div class="tpl-card-name">${esc(name)}</div>
-        ${desc ? `<div class="tpl-card-desc">${esc(desc)}</div>` : ''}
-      </div>
-      <div class="tpl-badge">active</div>
+      <div class="item-badge">active</div>
     `;
-    btn.addEventListener('click', () => applyTemplate(tpl, btn));
+    btn.addEventListener('click', () => applyRemoteTemplate(tpl, btn));
     list.appendChild(btn);
   });
 }
 
-async function applyTemplate(tpl, cardEl) {
-  document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('active'));
+async function applyRemoteTemplate(tpl, cardEl) {
+  document.querySelectorAll('#tplList .item-card').forEach(c => c.classList.remove('active'));
   cardEl.classList.add('active');
-
   let data = tpl;
 
-  /* If the entry only has a url, fetch the full template now */
   if (tpl.url && Object.keys(tpl).length <= 3) {
-    const nameEl = cardEl.querySelector('.tpl-card-desc') || cardEl.querySelector('.tpl-card-name');
-    const orig = nameEl.textContent;
-    nameEl.textContent = 'Loading…';
+    const metaEl = cardEl.querySelector('.item-meta') || cardEl.querySelector('.item-name');
+    const orig = metaEl.textContent;
+    metaEl.textContent = 'Loading…';
     try {
       const res = await fetch(tpl.url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       data = await res.json();
     } catch (err) {
-      setStatus('error', `Failed to fetch template: ${err.message}`);
+      setTplStatus('error', `Failed to fetch template: ${err.message}`);
       cardEl.classList.remove('active');
-      nameEl.textContent = orig;
+      metaEl.textContent = orig;
       return;
     }
-    nameEl.textContent = orig;
+    metaEl.textContent = orig;
   }
 
-  populateForm(data);
+  /* Clear saved-doc active state — template and saved doc are mutually exclusive */
+  document.querySelectorAll('#savedList .item-card').forEach(c => c.classList.remove('active'));
+
+  populateForm(data);    /* resets ALL fields before applying template values */
   runPreview();
 }
 
-function populateForm(tpl) {
-  Object.entries(FIELD_MAP).forEach(([key, id]) => {
-    if (tpl[key] === undefined || tpl[key] === null) return;
-    const el = document.getElementById(id);
-    if (el) el.value = tpl[key];
-  });
+/* ═══════════════════════════════════════════════════════════════
+   SAVED DOCUMENTS  (window.storage)
+   ═══════════════════════════════════════════════════════════════ */
+let pendingOverwriteName = null;
+
+function clearSaveError() {
+  const nameEl = document.getElementById('saveName');
+  nameEl.classList.remove('is-error');
+  document.getElementById('saveError').classList.remove('visible');
+  document.getElementById('saveError').textContent = '';
+  document.getElementById('saveSuccess').classList.remove('visible');
+}
+
+function showSaveError(msg) {
+  document.getElementById('saveName').classList.add('is-error');
+  const el = document.getElementById('saveError');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+function showSaveSuccess(msg) {
+  const el = document.getElementById('saveSuccess');
+  el.textContent = msg;
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), 3000);
+}
+
+async function saveDocument() {
+  cancelOverwrite();
+  clearSaveError();
+
+  const rawName = document.getElementById('saveName').value.trim();
+  if (!rawName) { showSaveError('Enter a name before saving.'); return; }
+
+  /* Sanitise: keep letters, digits, spaces, hyphens, underscores */
+  const name = rawName.replace(/[^a-zA-Z0-9 _\-]/g, '').trim();
+  if (!name) { showSaveError('Name contains only invalid characters.'); return; }
+
+  const key = STORAGE_PREFIX + name;
+
+  /* Check for existing doc with same name */
+  try {
+    await window.storage.get(key);
+    /* If we reach here the key exists — ask to overwrite */
+    pendingOverwriteName = name;
+    const bar = document.getElementById('overwriteBar');
+    document.getElementById('overwriteMsg').textContent = `"${name}" already exists.`;
+    bar.classList.add('visible');
+    return;
+  } catch {
+    /* Key doesn't exist — proceed to save */
+  }
+
+  await persistDoc(name);
+}
+
+async function confirmOverwrite() {
+  cancelOverwrite();
+  if (pendingOverwriteName) await persistDoc(pendingOverwriteName);
+  pendingOverwriteName = null;
+}
+
+function cancelOverwrite() {
+  pendingOverwriteName = null;
+  document.getElementById('overwriteBar').classList.remove('visible');
+}
+
+async function persistDoc(name) {
+  const key  = STORAGE_PREFIX + name;
+  const data = { ...readForm(), savedAt: new Date().toISOString() };
+  try {
+    await window.storage.set(key, JSON.stringify(data));
+    showSaveSuccess(`"${name}" saved.`);
+    document.getElementById('saveName').value = '';
+    await refreshSavedList();
+  } catch (err) {
+    showSaveError(`Save failed: ${err.message}`);
+  }
+}
+
+async function refreshSavedList() {
+  const container = document.getElementById('savedList');
+  container.innerHTML = '';
+  try {
+    const { keys } = await window.storage.list(STORAGE_PREFIX);
+    if (!keys || keys.length === 0) {
+      container.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>';
+      return;
+    }
+    /* Sort newest first by loading savedAt */
+    const entries = await Promise.all(keys.map(async k => {
+      try {
+        const r = await window.storage.get(k);
+        const d = JSON.parse(r.value);
+        return { key: k, name: k.slice(STORAGE_PREFIX.length), data: d };
+      } catch { return null; }
+    }));
+    entries
+      .filter(Boolean)
+      .sort((a, b) => (b.data.savedAt || '').localeCompare(a.data.savedAt || ''))
+      .forEach(entry => renderSavedCard(entry, container));
+  } catch {
+    container.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">Storage unavailable.</div>';
+  }
+}
+
+function renderSavedCard({ key, name, data }, container) {
+  const wrap = document.createElement('div');
+  wrap.className = 'item-card';
+  wrap.dataset.key = key;
+
+  const dateStr = data.savedAt
+    ? new Date(data.savedAt).toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' })
+    : '';
+
+  wrap.innerHTML = `
+    <div class="item-icon">${saveSvg()}</div>
+    <div class="item-body" style="cursor:pointer">
+      <div class="item-name">${esc(name)}</div>
+      ${dateStr ? `<div class="item-meta">${esc(dateStr)}</div>` : ''}
+    </div>
+    <button class="icon-btn" title="Load document" data-action="load">↑</button>
+    <button class="icon-btn danger" title="Delete document" data-action="delete">✕</button>
+  `;
+
+  wrap.querySelector('[data-action="load"]').addEventListener('click', () => loadSavedDoc(key, data, wrap));
+  wrap.querySelector('[data-action="delete"]').addEventListener('click', () => deleteSavedDoc(key, wrap));
+  wrap.querySelector('.item-body').addEventListener('click', () => loadSavedDoc(key, data, wrap));
+
+  container.appendChild(wrap);
+}
+
+async function loadSavedDoc(key, data, cardEl) {
+  /* Deactivate all cards in both lists */
+  document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
+  cardEl.classList.add('active');
+
+  populateForm(data);   /* resets ALL fields before applying saved values */
+  runPreview();
+}
+
+async function deleteSavedDoc(key, cardEl) {
+  try {
+    await window.storage.delete(key);
+    cardEl.remove();
+    const container = document.getElementById('savedList');
+    if (!container.querySelector('.item-card')) {
+      container.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>';
+    }
+  } catch (err) {
+    showSaveError(`Delete failed: ${err.message}`);
+  }
+}
+
+/* ── icon helpers ── */
+function docSvg() {
+  return `<svg width="14" height="16" viewBox="0 0 14 16" fill="none">
+    <rect x="1" y="1" width="9" height="12" rx="1.5" stroke="var(--ink3)" stroke-width="1.2"/>
+    <path d="M3 5h5M3 7.5h5M3 10h3" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round"/>
+    <path d="M10 1v4h4" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+function saveSvg() {
+  return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <rect x="1" y="1" width="12" height="12" rx="2" stroke="var(--ink3)" stroke-width="1.2"/>
+    <rect x="3" y="1" width="6" height="4" rx="0.5" stroke="var(--ink3)" stroke-width="1"/>
+    <rect x="3" y="7" width="8" height="5" rx="0.5" stroke="var(--ink3)" stroke-width="1"/>
+  </svg>`;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -626,9 +808,7 @@ function buildDoc() {
   const pageHeight = doc.internal.pageSize.getHeight();
 
   const errEl = document.getElementById('marginError');
-  if (leftMargin + rightMargin >= pageWidth - 10) {
-    errEl.classList.add('visible'); return null;
-  }
+  if (leftMargin + rightMargin >= pageWidth - 10) { errEl.classList.add('visible'); return null; }
   errEl.classList.remove('visible');
 
   const usableWidth       = pageWidth - leftMargin - rightMargin;
@@ -767,7 +947,7 @@ function runPreview() {
 document.querySelectorAll('#title,#author,#subject,#keywords,#textInput,#leftMargin,#rightMargin,#topMargin,#fontSize')
   .forEach(el => el.addEventListener('input', runPreview));
 
-/* Load PDF.js then kick off template fetch */
+/* ── Boot ── */
 (function () {
   const s = document.createElement('script');
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
@@ -778,6 +958,7 @@ document.querySelectorAll('#title,#author,#subject,#keywords,#textInput,#leftMar
   };
   document.head.appendChild(s);
   loadTemplates();
+  refreshSavedList();
 })();
 </script>
 </body>

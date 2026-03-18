@@ -20,6 +20,8 @@
   --accent:    #2d5be3;
   --accent-bg: #eef2fc;
   --danger:    #c44;
+  --success:   #2a7a48;
+  --success-bg:#eaf5ef;
   --radius:    6px;
   --mono:      'DM Mono', monospace;
   --sans:      'DM Sans', sans-serif;
@@ -42,6 +44,7 @@ header {
   display: flex;
   align-items: baseline;
   gap: 12px;
+  flex-shrink: 0;
 }
 header h1 {
   font-family: var(--serif);
@@ -63,6 +66,7 @@ header span {
   display: grid;
   grid-template-columns: 380px 1fr;
   min-height: 0;
+  height: calc(100vh - 61px);
 }
 
 /* ── LEFT PANEL ── */
@@ -70,7 +74,7 @@ header span {
   background: var(--paper);
   border-right: 1px solid var(--border);
   overflow-y: auto;
-  padding: 24px 22px 32px;
+  padding: 22px 22px 32px;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -86,7 +90,23 @@ header span {
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+.section-label .toggle-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.06em;
+  transition: color .15s;
+}
+.section-label .toggle-btn:hover { color: var(--ink2); transform: none; }
 
 .field { display: flex; flex-direction: column; gap: 5px; }
 .field label {
@@ -118,21 +138,114 @@ header span {
   resize: vertical;
   line-height: 1.55;
 }
-
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
 input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
-.error-msg {
-  font-size: 11.5px;
-  color: var(--danger);
-  margin-top: 3px;
-  display: none;
-}
+.error-msg { font-size: 11.5px; color: var(--danger); margin-top: 4px; display: none; }
 .error-msg.visible { display: block; }
 
+/* ── TEMPLATE LIST ── */
+.tpl-status {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 8px 11px;
+  border-radius: var(--radius);
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.tpl-status.loading {
+  display: flex;
+  color: var(--ink3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.tpl-status.error {
+  display: flex;
+  color: var(--danger);
+  background: #fdf0f0;
+  border: 1px solid #f5c6c6;
+}
+
+/* spinner */
+.spinner {
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--border);
+  border-top-color: var(--ink3);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tpl-list { display: flex; flex-direction: column; gap: 6px; }
+
+.tpl-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  text-align: left;
+  width: 100%;
+  font-family: var(--sans);
+}
+.tpl-card:hover  { border-color: var(--accent); background: var(--accent-bg); }
+.tpl-card.active { border-color: var(--accent); background: var(--accent-bg); }
+.tpl-card:active { transform: none; }
+
+.tpl-card-icon {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tpl-card-body { flex: 1; min-width: 0; }
+.tpl-card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tpl-card-desc {
+  font-size: 11px;
+  color: var(--ink3);
+  font-family: var(--mono);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tpl-badge {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid #c5d4f8;
+  border-radius: 4px;
+  padding: 2px 6px;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.tpl-card.active .tpl-badge { opacity: 1; }
+
+/* ── BUTTONS ── */
 .btn-group { display: flex; flex-direction: column; gap: 8px; }
 
 button {
@@ -154,10 +267,7 @@ button:active { transform: translateY(1px); }
 }
 #previewBtn:hover { background: var(--border); color: var(--ink); }
 
-#generatePdf {
-  background: var(--accent);
-  color: #fff;
-}
+#generatePdf { background: var(--accent); color: #fff; }
 #generatePdf:hover { background: #234bc4; }
 #generatePdf:disabled { opacity: .5; cursor: not-allowed; }
 
@@ -168,7 +278,6 @@ button:active { transform: translateY(1px); }
   overflow: hidden;
   background: #ccc9c0;
 }
-
 .preview-toolbar {
   background: var(--paper);
   border-bottom: 1px solid var(--border);
@@ -193,7 +302,6 @@ button:active { transform: translateY(1px); }
   transition: background .3s;
 }
 .preview-dot.live { background: #3c9e57; }
-
 .preview-scroll {
   flex: 1;
   overflow-y: auto;
@@ -203,7 +311,6 @@ button:active { transform: translateY(1px); }
   align-items: center;
   gap: 18px;
 }
-
 .pdf-page-wrap {
   width: 100%;
   max-width: 680px;
@@ -211,10 +318,8 @@ button:active { transform: translateY(1px); }
   box-shadow: 0 4px 24px rgba(0,0,0,.18);
   border-radius: 2px;
   overflow: hidden;
-  position: relative;
 }
 .pdf-page-wrap canvas { display: block; width: 100%; }
-
 .preview-empty {
   display: flex;
   flex-direction: column;
@@ -228,7 +333,7 @@ button:active { transform: translateY(1px); }
 .preview-empty p { font-size: 13px; font-family: var(--mono); letter-spacing: 0.04em; }
 
 @media (max-width: 760px) {
-  .workspace { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .workspace { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
   .preview-panel { min-height: 400px; }
 }
 </style>
@@ -242,9 +347,24 @@ button:active { transform: translateY(1px); }
 
 <div class="workspace">
 
-  <!-- ── CONTROLS ── -->
   <aside class="controls">
 
+    <!-- ══════════ TEMPLATES ══════════ -->
+    <div>
+      <div class="section-label">
+        Templates
+        <button class="toggle-btn" id="tplToggle" onclick="toggleTpl()">hide</button>
+      </div>
+      <div id="tplBody" style="display:flex;flex-direction:column;gap:8px">
+        <div class="tpl-status loading" id="tplStatus">
+          <span class="spinner"></span>
+          <span>Loading templates…</span>
+        </div>
+        <div class="tpl-list" id="tplList"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ METADATA ══════════ -->
     <div>
       <div class="section-label">Document metadata</div>
       <div style="display:flex;flex-direction:column;gap:10px">
@@ -269,6 +389,7 @@ button:active { transform: translateY(1px); }
       </div>
     </div>
 
+    <!-- ══════════ CONTENT ══════════ -->
     <div>
       <div class="section-label">Content</div>
       <div class="field">
@@ -276,6 +397,7 @@ button:active { transform: translateY(1px); }
       </div>
     </div>
 
+    <!-- ══════════ LAYOUT ══════════ -->
     <div>
       <div class="section-label">Layout</div>
       <div class="grid-2">
@@ -299,14 +421,15 @@ button:active { transform: translateY(1px); }
       <div id="marginError" class="error-msg">Margins too large for page width (210 mm).</div>
     </div>
 
+    <!-- ══════════ ACTIONS ══════════ -->
     <div class="btn-group">
       <button id="previewBtn" onclick="runPreview()">↺ Refresh preview</button>
-      <button id="generatePdf" onclick="generate(true)">↓ Download PDF</button>
+      <button id="generatePdf" onclick="generate()">↓ Download PDF</button>
     </div>
 
   </aside>
 
-  <!-- ── PREVIEW ── -->
+  <!-- ══════════ PREVIEW ══════════ -->
   <section class="preview-panel">
     <div class="preview-toolbar">
       <span><span class="preview-dot" id="liveDot"></span>Live preview</span>
@@ -327,79 +450,222 @@ button:active { transform: translateY(1px); }
 </div>
 
 <script>
-/* ── BUILD PDF ───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   TEMPLATE LOADER
+   ═══════════════════════════════════════════════════════════════
+
+   The config URL must return JSON in one of two shapes:
+
+   A) Array of inline template objects (all fields applied directly):
+      [
+        { "name": "Cover Letter", "author": "Jane", "content": "…", … },
+        …
+      ]
+
+   B) Array of stubs with a remote URL to the full template:
+      [
+        { "name": "Cover Letter", "description": "formal tone", "url": "https://…/cover.json" },
+        …
+      ]
+
+   Shape A and B can be mixed in the same array.
+   Fields the template doesn't specify are left untouched in the form.
+
+   Supported fields:
+     name, title, author, subject, keywords,
+     content, leftMargin, rightMargin, topMargin, fontSize
+   ═══════════════════════════════════════════════════════════════ */
+
+const TEMPLATES_URL = 'https://static-conf.vercel.app/go/text-2-pdf';
+
+const FIELD_MAP = {
+  title:       'title',
+  author:      'author',
+  subject:     'subject',
+  keywords:    'keywords',
+  content:     'textInput',
+  leftMargin:  'leftMargin',
+  rightMargin: 'rightMargin',
+  topMargin:   'topMargin',
+  fontSize:    'fontSize',
+};
+
+let tplOpen = true;
+
+function toggleTpl() {
+  tplOpen = !tplOpen;
+  document.getElementById('tplBody').style.display  = tplOpen ? 'flex' : 'none';
+  document.getElementById('tplToggle').textContent  = tplOpen ? 'hide' : 'show';
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('tplStatus');
+  if (!type) { el.style.display = 'none'; return; }
+  el.className = 'tpl-status ' + type;
+  el.innerHTML = type === 'loading'
+    ? `<span class="spinner"></span><span>${esc(msg)}</span>`
+    : esc(msg);
+  el.style.display = 'flex';
+}
+
+async function loadTemplates() {
+  setStatus('loading', 'Loading templates…');
+  try {
+    const res = await fetch(TEMPLATES_URL);
+    if (!res.ok) throw new Error(`Server returned ${res.status}.`);
+
+    const data = await res.json();
+
+    /* Normalise to an array */
+    const list = Array.isArray(data) ? data
+               : Array.isArray(data.templates) ? data.templates
+               : null;
+
+    if (!list || list.length === 0) {
+      setStatus('error', 'No templates returned by the server.');
+      return;
+    }
+
+    setStatus(null);
+    renderList(list);
+
+  } catch (err) {
+    setStatus('error', `Could not load templates: ${err.message}`);
+  }
+}
+
+function renderList(templates) {
+  const list = document.getElementById('tplList');
+  list.innerHTML = '';
+
+  templates.forEach(tpl => {
+    const name = tpl.name || tpl.title || 'Untitled';
+    const desc = tpl.description || tpl.subject || '';
+
+    const btn = document.createElement('button');
+    btn.className = 'tpl-card';
+    btn.innerHTML = `
+      <div class="tpl-card-icon">
+        <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
+          <rect x="1" y="1" width="9" height="12" rx="1.5" stroke="var(--ink3)" stroke-width="1.2"/>
+          <path d="M3 5h5M3 7.5h5M3 10h3" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round"/>
+          <path d="M10 1v4h4" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="tpl-card-body">
+        <div class="tpl-card-name">${esc(name)}</div>
+        ${desc ? `<div class="tpl-card-desc">${esc(desc)}</div>` : ''}
+      </div>
+      <div class="tpl-badge">active</div>
+    `;
+    btn.addEventListener('click', () => applyTemplate(tpl, btn));
+    list.appendChild(btn);
+  });
+}
+
+async function applyTemplate(tpl, cardEl) {
+  document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('active'));
+  cardEl.classList.add('active');
+
+  let data = tpl;
+
+  /* If the entry only has a url, fetch the full template now */
+  if (tpl.url && Object.keys(tpl).length <= 3) {
+    const nameEl = cardEl.querySelector('.tpl-card-desc') || cardEl.querySelector('.tpl-card-name');
+    const orig = nameEl.textContent;
+    nameEl.textContent = 'Loading…';
+    try {
+      const res = await fetch(tpl.url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      data = await res.json();
+    } catch (err) {
+      setStatus('error', `Failed to fetch template: ${err.message}`);
+      cardEl.classList.remove('active');
+      nameEl.textContent = orig;
+      return;
+    }
+    nameEl.textContent = orig;
+  }
+
+  populateForm(data);
+  runPreview();
+}
+
+function populateForm(tpl) {
+  Object.entries(FIELD_MAP).forEach(([key, id]) => {
+    if (tpl[key] === undefined || tpl[key] === null) return;
+    const el = document.getElementById(id);
+    if (el) el.value = tpl[key];
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUILD PDF
+   ═══════════════════════════════════════════════════════════════ */
 function buildDoc() {
   const { jsPDF } = window.jspdf;
 
-  const title      = document.getElementById('title').value.trim();
-  const author     = document.getElementById('author').value.trim();
-  const subject    = document.getElementById('subject').value.trim();
-  const keywords   = document.getElementById('keywords').value.trim();
-  const text       = document.getElementById('textInput').value || '';
-  const leftMargin = Math.max(0, Number(document.getElementById('leftMargin').value)  || 20);
-  const rightMargin= Math.max(0, Number(document.getElementById('rightMargin').value) || 20);
-  const topMarginInput = Math.max(0, Number(document.getElementById('topMargin').value) || 30);
-  const fontSize   = Math.min(24, Math.max(6, Number(document.getElementById('fontSize').value) || 12));
+  const title          = document.getElementById('title').value.trim();
+  const author         = document.getElementById('author').value.trim();
+  const subject        = document.getElementById('subject').value.trim();
+  const keywords       = document.getElementById('keywords').value.trim();
+  const text           = document.getElementById('textInput').value || '';
+  const leftMargin     = Math.max(0, Number(document.getElementById('leftMargin').value)  || 20);
+  const rightMargin    = Math.max(0, Number(document.getElementById('rightMargin').value) || 20);
+  const topMarginInput = Math.max(0, Number(document.getElementById('topMargin').value)   || 30);
+  const fontSize       = Math.min(24, Math.max(6, Number(document.getElementById('fontSize').value) || 12));
 
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const doc        = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageWidth  = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
-  const pageWidth  = doc.internal.pageSize.getWidth();   // 210mm
-  const pageHeight = doc.internal.pageSize.getHeight();  // 297mm
-
-  // ── FIX: guard against margins that exceed page width ──────────
-  const errorEl = document.getElementById('marginError');
+  const errEl = document.getElementById('marginError');
   if (leftMargin + rightMargin >= pageWidth - 10) {
-    errorEl.classList.add('visible');
-    return null;
+    errEl.classList.add('visible'); return null;
   }
-  errorEl.classList.remove('visible');
+  errEl.classList.remove('visible');
 
-  const usableWidth  = pageWidth - leftMargin - rightMargin;
-  const lineHeight   = (fontSize * 1.15) * 0.352777778;    // pt → mm
-
-  // ── FIX: only apply extraGap when a subject exists ─────────────
-  const subjectFontSize  = subject ? Math.min(26, fontSize + 10) : 0;
+  const usableWidth       = pageWidth - leftMargin - rightMargin;
+  const lineHeight        = (fontSize * 1.15) * 0.352777778;
+  const subjectFontSize   = subject ? Math.min(26, fontSize + 10) : 0;
   const subjectLineHeight = subjectFontSize ? (subjectFontSize * 1.15) * 0.352777778 : 0;
-  const subjectLines     = subject ? doc.splitTextToSize(subject, usableWidth) : [];
-  const subjectHeight    = subjectLines.length * subjectLineHeight;
-  const extraGap         = subject ? 20 : 0;               // ← BUG FIX
+  const subjectLines      = subject ? doc.splitTextToSize(subject, usableWidth) : [];
+  const subjectHeight     = subjectLines.length * subjectLineHeight;
+  const extraGap          = subject ? 20 : 0;
+  const topMargin         = topMarginInput + subjectHeight + extraGap;
+  const lines             = doc.splitTextToSize(text, usableWidth);
+  const bottomMargin      = 10;
+  const footerOffset      = 8;
 
-  const topMargin = topMarginInput + subjectHeight + extraGap;
-
-  const lines        = doc.splitTextToSize(text, usableWidth);
-  const bottomMargin = 10;
-  const footerOffset = 8;
-
-  // ── FIX: explicit font family throughout ───────────────────────
   function drawSubject() {
     if (!subject) return;
     doc.setFontSize(subjectFontSize);
-    doc.setFont('helvetica', 'bold');                       // ← BUG FIX
+    doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     let y = topMarginInput + subjectLineHeight * 0.8;
-    for (const line of subjectLines) {
-      doc.text(line, leftMargin, y);                        // maxWidth removed (redundant after splitTextToSize)
-      y += subjectLineHeight;
-    }
+    for (const line of subjectLines) { doc.text(line, leftMargin, y); y += subjectLineHeight; }
     doc.setFontSize(fontSize);
-    doc.setFont('helvetica', 'normal');                     // ← BUG FIX
+    doc.setFont('helvetica', 'normal');
   }
 
-  // ── FIX: footer font size can't exceed body size ────────────────
-  function drawFooter(pageNum, total) {
-    const fSize = Math.min(fontSize, Math.max(6, fontSize - 1)); // ← BUG FIX
+  function drawFooter(n, total) {
+    const fSize = Math.min(fontSize, Math.max(6, fontSize - 1));
     doc.setFontSize(fSize);
     doc.setTextColor(120, 120, 120);
     const y = pageHeight - footerOffset;
     if (author) doc.text(author, leftMargin, y);
-    const pageLabel = `${pageNum} / ${total}`;
-    const labelW = doc.getTextWidth(pageLabel);
-    doc.text(pageLabel, pageWidth - rightMargin - labelW, y);
+    const lbl = `${n} / ${total}`;
+    doc.text(lbl, pageWidth - rightMargin - doc.getTextWidth(lbl), y);
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(fontSize);
   }
 
-  // ── PDF metadata ────────────────────────────────────────────────
   const props = {};
   if (title)    props.title    = title;
   if (subject)  props.subject  = subject;
@@ -411,69 +677,48 @@ function buildDoc() {
   doc.setFontSize(fontSize);
   doc.setTextColor(0, 0, 0);
 
-  // ── Pre-calculate total pages ───────────────────────────────────
-  function calcTotalPages() {
-    let count = 1, idx = 0, first = true;
-    while (idx < lines.length) {
-      const top = first ? topMargin : topMarginInput;
-      let y = top;
-      while (idx < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
-        y += lineHeight; idx++;
-      }
-      if (idx < lines.length) { count++; first = false; }
-      else break;
+  function countPages() {
+    let n = 1, i = 0, first = true;
+    while (i < lines.length) {
+      let y = first ? topMargin : topMarginInput;
+      while (i < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) { y += lineHeight; i++; }
+      if (i < lines.length) { n++; first = false; } else break;
     }
-    if (lines.length === 0) count = 1;
-    return count;
+    return lines.length === 0 ? 1 : n;
   }
 
-  const totalPages = calcTotalPages();
-  let lineIndex = 0, pageNum = 1, firstPage = true;
+  const total = countPages();
+  let idx = 0, pageNum = 1, firstPage = true;
 
-  while (lineIndex < lines.length) {
+  while (idx < lines.length) {
     if (firstPage) drawSubject();
-    const currentTop = firstPage ? topMargin : topMarginInput;
-    let y = currentTop;
-    while (lineIndex < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
-      doc.text(lines[lineIndex], leftMargin, y);
-      y += lineHeight;
-      lineIndex++;
+    let y = firstPage ? topMargin : topMarginInput;
+    while (idx < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
+      doc.text(lines[idx], leftMargin, y); y += lineHeight; idx++;
     }
-    drawFooter(pageNum, totalPages);
-    if (lineIndex < lines.length) {
-      doc.addPage();
-      pageNum++;
-      firstPage = false;
-    } else break;
+    drawFooter(pageNum, total);
+    if (idx < lines.length) { doc.addPage(); pageNum++; firstPage = false; }
+    else break;
   }
 
-  if (lines.length === 0) {
-    drawSubject();
-    drawFooter(1, 1);
-  }
-
+  if (lines.length === 0) { drawSubject(); drawFooter(1, 1); }
   return doc;
 }
 
-/* ── GENERATE & DOWNLOAD ─────────────────────────────────────────── */
-function generate(download) {
+/* ═══════════════════════════════════════════════════════════════
+   DOWNLOAD
+   ═══════════════════════════════════════════════════════════════ */
+function generate() {
   const btn = document.getElementById('generatePdf');
   btn.disabled = true;
   btn.textContent = 'Generating…';
-  // yield to browser to show the disabled state
   setTimeout(() => {
     try {
       const doc = buildDoc();
       if (!doc) return;
-      if (download) {
-        const rawTitle = document.getElementById('title').value.trim();
-        // ── FIX: sanitize illegal filename characters ─────────────
-        const safe = rawTitle
-          .replace(/[\\/:*?"<>|]/g, '')
-          .replace(/\s+/g, '_')
-          .trim() || 'converted';
-        doc.save(safe + '.pdf');
-      }
+      const safe = document.getElementById('title').value.trim()
+        .replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_').trim() || 'converted';
+      doc.save(safe + '.pdf');
     } finally {
       btn.disabled = false;
       btn.textContent = '↓ Download PDF';
@@ -481,61 +726,49 @@ function generate(download) {
   }, 20);
 }
 
-/* ── LIVE PREVIEW ────────────────────────────────────────────────── */
-let previewDebounce = null;
+/* ═══════════════════════════════════════════════════════════════
+   LIVE PREVIEW
+   ═══════════════════════════════════════════════════════════════ */
+let previewTimer = null;
 
 function runPreview() {
-  clearTimeout(previewDebounce);
-  const dot = document.getElementById('liveDot');
-  dot.classList.remove('live');
-
-  previewDebounce = setTimeout(() => {
+  clearTimeout(previewTimer);
+  document.getElementById('liveDot').classList.remove('live');
+  previewTimer = setTimeout(async () => {
     const doc = buildDoc();
     if (!doc) return;
 
     const scroll = document.getElementById('previewScroll');
-    const empty  = document.getElementById('emptyState');
-    const pageCountEl = document.getElementById('pageCount');
-
-    const data   = doc.output('arraybuffer');
-    const numPagesRendered = doc.internal.getNumberOfPages();
-
-    pageCountEl.textContent = numPagesRendered + (numPagesRendered === 1 ? ' page' : ' pages');
-
-    // Remove old pages
+    const total  = doc.internal.getNumberOfPages();
+    document.getElementById('pageCount').textContent = total + (total === 1 ? ' page' : ' pages');
     scroll.querySelectorAll('.pdf-page-wrap').forEach(el => el.remove());
-    empty.style.display = 'none';
+    document.getElementById('emptyState').style.display = 'none';
 
-    renderPagesFromBuffer(data, numPagesRendered, scroll);
-    dot.classList.add('live');
+    if (window.pdfjsLib) {
+      const buf = doc.output('arraybuffer');
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page     = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 2 });
+        const canvas   = document.createElement('canvas');
+        canvas.width   = viewport.width;
+        canvas.height  = viewport.height;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        const wrap = document.createElement('div');
+        wrap.className = 'pdf-page-wrap';
+        wrap.appendChild(canvas);
+        scroll.appendChild(wrap);
+      }
+    }
+    document.getElementById('liveDot').classList.add('live');
   }, 350);
 }
 
-async function renderPagesFromBuffer(buffer, numPages, scroll) {
-  if (!window.pdfjsLib) return;
-  const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
-  for (let i = 1; i <= pdfDoc.numPages; i++) {
-    const page = await pdfDoc.getPage(i);
-    const viewport = page.getViewport({ scale: 2 });
-    const canvas = document.createElement('canvas');
-    canvas.width  = viewport.width;
-    canvas.height = viewport.height;
-    const ctx = canvas.getContext('2d');
-    await page.render({ canvasContext: ctx, viewport }).promise;
-    const wrap = document.createElement('div');
-    wrap.className = 'pdf-page-wrap';
-    wrap.appendChild(canvas);
-    scroll.appendChild(wrap);
-  }
-}
+document.querySelectorAll('#title,#author,#subject,#keywords,#textInput,#leftMargin,#rightMargin,#topMargin,#fontSize')
+  .forEach(el => el.addEventListener('input', runPreview));
 
-/* ── DEBOUNCED AUTO-PREVIEW ──────────────────────────────────────── */
-document.querySelectorAll('input, textarea').forEach(el => {
-  el.addEventListener('input', runPreview);
-});
-
-/* ── LOAD PDF.JS FOR RENDERING ───────────────────────────────────── */
-(function loadPdfJs() {
+/* Load PDF.js then kick off template fetch */
+(function () {
   const s = document.createElement('script');
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
   s.onload = () => {
@@ -544,6 +777,7 @@ document.querySelectorAll('input, textarea').forEach(el => {
     runPreview();
   };
   document.head.appendChild(s);
+  loadTemplates();
 })();
 </script>
 </body>

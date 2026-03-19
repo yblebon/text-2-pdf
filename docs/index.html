@@ -605,19 +605,33 @@ function buildDoc() {
   if (leftMargin + rightMargin >= pageWidth - 10) { errEl.classList.add('visible'); return null; }
   errEl.classList.remove('visible');
 
-  const usableWidth       = pageWidth - leftMargin - rightMargin;
-  const lineHeight        = (fontSize * 1.15) * 0.352777778;
+  const usableWidth  = pageWidth - leftMargin - rightMargin;
+  const lineHeight   = (fontSize * 1.15) * 0.352777778;
+  const bottomMargin = 10;
+  const footerOffset = 8;
+
+  /* Set body font FIRST so splitTextToSize measures with the correct font/size */
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(fontSize);
+  doc.setTextColor(0, 0, 0);
+
+  /* Split body text with the correct font active */
+  const rawLines = doc.splitTextToSize(text, usableWidth);
+
+  /* Subject: switch to bold/larger font, split, then restore body font */
   const subjectFontSize   = subject ? Math.min(26, fontSize + 10) : 0;
   const subjectLineHeight = subjectFontSize ? (subjectFontSize * 1.15) * 0.352777778 : 0;
-  const subjectLines      = subject ? doc.splitTextToSize(subject, usableWidth) : [];
-  const subjectHeight     = subjectLines.length * subjectLineHeight;
-  const extraGap          = subject ? 20 : 0;
-  const topMargin         = topMarginInput + subjectHeight + extraGap;
-  const bottomMargin      = 10;
-  const footerOffset      = 8;
-
-  /* ── split body text honouring usableWidth ── */
-  const rawLines = doc.splitTextToSize(text, usableWidth);
+  let subjectLines = [];
+  if (subject) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(subjectFontSize);
+    subjectLines = doc.splitTextToSize(subject, usableWidth);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(fontSize);
+  }
+  const subjectHeight = subjectLines.length * subjectLineHeight;
+  const extraGap      = subject ? 20 : 0;
+  const topMargin     = topMarginInput + subjectHeight + extraGap;
 
   function drawSubject() {
     if (!subject) return;
@@ -626,8 +640,8 @@ function buildDoc() {
     doc.setTextColor(0, 0, 0);
     let y = topMarginInput + subjectLineHeight * 0.8;
     for (const line of subjectLines) {
-      /* left-aligned, anchored at leftMargin, constrained to usableWidth */
-      doc.text(line, leftMargin, y, { align: 'left', maxWidth: usableWidth });
+      /* Lines are already split to usableWidth — no maxWidth to avoid double-wrap */
+      doc.text(line, leftMargin, y);
       y += subjectLineHeight;
     }
     doc.setFontSize(fontSize);
@@ -639,7 +653,7 @@ function buildDoc() {
     doc.setFontSize(fSize);
     doc.setTextColor(120, 120, 120);
     const y = pageHeight - footerOffset;
-    if (author) doc.text(author, leftMargin, y, { align: 'left', maxWidth: usableWidth - 20 });
+    if (author) doc.text(author, leftMargin, y);
     const lbl = `${n} / ${total}`;
     doc.text(lbl, pageWidth - rightMargin - doc.getTextWidth(lbl), y);
     doc.setTextColor(0, 0, 0);
@@ -653,6 +667,7 @@ function buildDoc() {
   if (author)   props.author   = author;
   if (Object.keys(props).length) doc.setProperties(props);
 
+  /* Font already set correctly above — restore to body font before rendering */
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(fontSize);
   doc.setTextColor(0, 0, 0);
@@ -674,8 +689,8 @@ function buildDoc() {
     if (firstPage) drawSubject();
     let y = firstPage ? topMargin : topMarginInput;
     while (idx < rawLines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
-      /* left-aligned, maxWidth ensures no single line overruns the right margin */
-      doc.text(rawLines[idx], leftMargin, y, { align: 'left', maxWidth: usableWidth });
+      /* Lines are pre-split to usableWidth — no maxWidth to avoid double-wrap */
+      doc.text(rawLines[idx], leftMargin, y);
       y += lineHeight;
       idx++;
     }

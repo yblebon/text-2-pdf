@@ -11,321 +11,131 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --ink:       #1a1917;
-  --ink2:      #6b6860;
-  --ink3:      #a8a49d;
-  --paper:     #faf9f7;
-  --surface:   #f3f1ed;
-  --border:    #e2dfd8;
-  --accent:    #2d5be3;
-  --accent-bg: #eef2fc;
-  --danger:    #c44;
-  --danger-bg: #fdf0f0;
-  --danger-bd: #f5c6c6;
-  --success:   #2a7a48;
-  --success-bg:#eaf5ef;
-  --success-bd:#b7ddc5;
-  --radius:    6px;
-  --mono:      'DM Mono', monospace;
-  --sans:      'DM Sans', sans-serif;
-  --serif:     'Instrument Serif', serif;
+  --ink:        #1a1917;
+  --ink2:       #6b6860;
+  --ink3:       #a8a49d;
+  --paper:      #faf9f7;
+  --surface:    #f3f1ed;
+  --border:     #e2dfd8;
+  --accent:     #2d5be3;
+  --accent-bg:  #eef2fc;
+  --danger:     #c44;
+  --danger-bg:  #fdf0f0;
+  --danger-bd:  #f5c6c6;
+  --success:    #2a7a48;
+  --success-bg: #eaf5ef;
+  --success-bd: #b7ddc5;
+  --radius:     6px;
+  --mono:       'DM Mono', monospace;
+  --sans:       'DM Sans', sans-serif;
+  --serif:      'Instrument Serif', serif;
 }
 
-body {
-  font-family: var(--sans);
-  background: var(--surface);
-  color: var(--ink);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+body { font-family: var(--sans); background: var(--surface); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
 
 header {
-  padding: 18px 28px;
-  background: var(--paper);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-shrink: 0;
+  padding: 18px 28px; background: var(--paper); border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; gap: 12px; flex-shrink: 0;
 }
 header h1 { font-family: var(--serif); font-size: 22px; font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
 header span { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; }
 
-.workspace {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 390px 1fr;
-  min-height: 0;
-  height: calc(100vh - 61px);
-}
+.workspace { flex: 1; display: grid; grid-template-columns: 390px 1fr; min-height: 0; height: calc(100vh - 61px); }
 
 /* ── LEFT PANEL ── */
-.controls {
-  background: var(--paper);
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  padding: 22px 22px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+.controls { background: var(--paper); border-right: 1px solid var(--border); overflow-y: auto; padding: 22px 22px 40px; display: flex; flex-direction: column; gap: 24px; }
 
 .section-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink3);
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink3); padding-bottom: 10px;
+  border-bottom: 1px solid var(--border); margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-.toggle-btn {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--ink3);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  letter-spacing: 0.06em;
-}
+.toggle-btn { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--ink3); background: none; border: none; cursor: pointer; padding: 0; letter-spacing: 0.06em; }
 .toggle-btn:hover { color: var(--ink2); transform: none !important; }
 
 .field { display: flex; flex-direction: column; gap: 5px; }
 .field label { font-size: 12px; font-weight: 500; color: var(--ink2); letter-spacing: 0.01em; }
 .hint { font-weight: 400; color: var(--ink3); font-size: 11px; margin-left: 4px; }
 
-.field input,
-.field textarea {
-  font-family: var(--sans);
-  font-size: 13.5px;
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 9px 11px;
-  transition: border-color .15s, box-shadow .15s;
-  outline: none;
-  width: 100%;
+.field input, .field textarea {
+  font-family: var(--sans); font-size: 13.5px; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 9px 11px;
+  transition: border-color .15s, box-shadow .15s; outline: none; width: 100%;
 }
-.field input:focus, .field textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-bg);
-}
+.field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
 .field input.is-error { border-color: var(--danger); box-shadow: 0 0 0 3px var(--danger-bg); }
 .field textarea { min-height: 130px; resize: vertical; line-height: 1.55; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
 input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
-.msg {
-  font-size: 11.5px;
-  padding: 0;
-  margin-top: 4px;
-  display: none;
-}
+.msg { font-size: 11.5px; margin-top: 4px; display: none; }
 .msg.visible { display: block; }
 .msg.error   { color: var(--danger); }
 .msg.success { color: var(--success); }
 
 /* ── SPINNER ── */
-.spinner {
-  width: 12px; height: 12px;
-  border: 1.5px solid var(--border);
-  border-top-color: var(--ink3);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  flex-shrink: 0;
-}
+.spinner { width: 12px; height: 12px; border: 1.5px solid var(--border); border-top-color: var(--ink3); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── STATUS PILLS ── */
-.status-pill {
-  font-family: var(--mono);
-  font-size: 11px;
-  padding: 8px 11px;
-  border-radius: var(--radius);
-  display: none;
-  align-items: center;
-  gap: 8px;
-}
+.status-pill { font-family: var(--mono); font-size: 11px; padding: 8px 11px; border-radius: var(--radius); display: none; align-items: center; gap: 8px; }
 .status-pill.loading { display: flex; color: var(--ink3); background: var(--surface); border: 1px solid var(--border); }
 .status-pill.error   { display: flex; color: var(--danger); background: var(--danger-bg); border: 1px solid var(--danger-bd); }
-.status-pill.success { display: flex; color: var(--success); background: var(--success-bg); border: 1px solid var(--success-bd); }
 
-/* ── CARD LIST (templates & saved docs share this) ── */
+/* ── CARD LIST ── */
 .card-list { display: flex; flex-direction: column; gap: 6px; }
 
-.item-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 11px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition: border-color .15s, background .15s;
-  width: 100%;
-  font-family: var(--sans);
-  text-align: left;
-}
+.item-card { display: flex; align-items: center; gap: 10px; padding: 9px 11px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .15s, background .15s; width: 100%; font-family: var(--sans); text-align: left; }
 .item-card.clickable { cursor: pointer; }
-.item-card.clickable:hover  { border-color: var(--accent); background: var(--accent-bg); }
-.item-card.active           { border-color: var(--accent); background: var(--accent-bg); }
-.item-card:active           { transform: none; }
+.item-card.clickable:hover { border-color: var(--accent); background: var(--accent-bg); }
+.item-card.active          { border-color: var(--accent); background: var(--accent-bg); }
+.item-card:active          { transform: none; }
 
-.item-icon {
-  flex-shrink: 0;
-  width: 28px; height: 28px;
-  background: var(--paper);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.item-icon { flex-shrink: 0; width: 28px; height: 28px; background: var(--paper); border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
 .item-body { flex: 1; min-width: 0; }
-.item-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.item-meta {
-  font-size: 11px;
-  color: var(--ink3);
-  font-family: var(--mono);
-  margin-top: 1px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.item-badge {
-  flex-shrink: 0;
-  font-family: var(--mono);
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 1px solid #c5d4f8;
-  border-radius: 4px;
-  padding: 2px 6px;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity .2s;
-}
+.item-name { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-meta { font-size: 11px; color: var(--ink3); font-family: var(--mono); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-badge { flex-shrink: 0; font-family: var(--mono); font-size: 9.5px; font-weight: 500; letter-spacing: 0.05em; color: var(--accent); background: var(--accent-bg); border: 1px solid #c5d4f8; border-radius: 4px; padding: 2px 6px; text-transform: uppercase; opacity: 0; transition: opacity .2s; }
 .item-card.active .item-badge { opacity: 1; }
 
-/* icon-only button used in saved doc rows */
-.icon-btn {
-  flex-shrink: 0;
-  background: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  padding: 4px 6px;
-  cursor: pointer;
-  color: var(--ink3);
-  font-size: 13px;
-  line-height: 1;
-  transition: color .15s, border-color .15s, background .15s;
-}
-.icon-btn:hover { color: var(--ink2); border-color: var(--border); background: var(--paper); transform: none; }
+.icon-btn { flex-shrink: 0; background: none; border: 1px solid transparent; border-radius: 4px; padding: 4px 6px; cursor: pointer; color: var(--ink3); font-size: 13px; line-height: 1; transition: color .15s, border-color .15s, background .15s; }
+.icon-btn:hover        { color: var(--ink2); border-color: var(--border); background: var(--paper); transform: none; }
 .icon-btn.danger:hover { color: var(--danger); border-color: var(--danger-bd); background: var(--danger-bg); }
 
-/* ── SAVE FORM (inline) ── */
-.save-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
+/* ── SAVE ROW ── */
+.save-row { display: flex; gap: 8px; align-items: flex-end; }
 .save-row .field { flex: 1; }
-.save-row .save-btn {
-  flex-shrink: 0;
-  font-family: var(--sans);
-  font-size: 12.5px;
-  font-weight: 500;
-  padding: 9px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--ink2);
-  border-radius: var(--radius);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background .15s, color .15s;
-}
-.save-row .save-btn:hover { background: var(--border); color: var(--ink); }
+.save-btn { flex-shrink: 0; font-family: var(--sans); font-size: 12.5px; font-weight: 500; padding: 9px 14px; background: var(--surface); border: 1px solid var(--border); color: var(--ink2); border-radius: var(--radius); cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
+.save-btn:hover { background: var(--border); color: var(--ink); transform: none; }
 
-/* overwrite confirm bar */
-.overwrite-bar {
-  background: #fff8ec;
-  border: 1px solid #f0d080;
-  border-radius: var(--radius);
-  padding: 9px 12px;
-  font-size: 12px;
-  color: #7a5800;
-  display: none;
-  gap: 10px;
-  align-items: center;
-}
+/* ── OVERWRITE CONFIRM ── */
+.overwrite-bar { background: #fff8ec; border: 1px solid #f0d080; border-radius: var(--radius); padding: 9px 12px; font-size: 12px; color: #7a5800; display: none; gap: 10px; align-items: center; }
 .overwrite-bar.visible { display: flex; }
 .overwrite-bar span { flex: 1; }
-.overwrite-bar button {
-  font-size: 12px;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: var(--sans);
-  font-weight: 500;
-  border: 1px solid;
-}
+.overwrite-bar button { font-size: 12px; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-family: var(--sans); font-weight: 500; border: 1px solid; }
 .overwrite-bar .ob-confirm { background: #7a5800; color: #fff; border-color: #7a5800; }
 .overwrite-bar .ob-cancel  { background: #fff8ec; color: #7a5800; border-color: #f0d080; }
 .overwrite-bar button:active { transform: none; }
 
 /* ── ACTION BUTTONS ── */
 .btn-group { display: flex; flex-direction: column; gap: 8px; }
-button {
-  font-family: var(--sans);
-  font-size: 13.5px;
-  font-weight: 500;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  padding: 11px 16px;
-  transition: background .15s, opacity .15s, transform .1s;
-}
+button { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border: none; border-radius: var(--radius); cursor: pointer; padding: 11px 16px; transition: background .15s, opacity .15s, transform .1s; }
 button:active { transform: translateY(1px); }
 
-#previewBtn { background: var(--surface); border: 1px solid var(--border); color: var(--ink2); }
-#previewBtn:hover { background: var(--border); color: var(--ink); }
+#previewBtn  { background: var(--surface); border: 1px solid var(--border); color: var(--ink2); }
+#previewBtn:hover  { background: var(--border); color: var(--ink); }
+#exportJsonBtn { background: var(--surface); border: 1px solid var(--border); color: var(--ink2); }
+#exportJsonBtn:hover { background: var(--border); color: var(--ink); }
 #generatePdf { background: var(--accent); color: #fff; }
 #generatePdf:hover { background: #234bc4; }
 #generatePdf:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ── RIGHT PANEL ── */
 .preview-panel { display: flex; flex-direction: column; overflow: hidden; background: #ccc9c0; }
-.preview-toolbar {
-  background: var(--paper);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
+.preview-toolbar { background: var(--paper); border-bottom: 1px solid var(--border); padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .preview-toolbar span { font-family: var(--mono); font-size: 10.5px; color: var(--ink3); letter-spacing: 0.06em; }
 .preview-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); display: inline-block; margin-right: 6px; transition: background .3s; }
 .preview-dot.live { background: #3c9e57; }
@@ -373,26 +183,22 @@ button:active { transform: translateY(1px); }
         <button class="toggle-btn" id="savedToggle" onclick="toggleSection('savedBody','savedToggle')">hide</button>
       </div>
       <div id="savedBody" style="display:flex;flex-direction:column;gap:8px">
-
         <div class="save-row">
           <div class="field">
             <label for="saveName">Document name</label>
-            <input id="saveName" type="text" placeholder="my-document" autocomplete="off" oninput="clearSaveError()">
+            <input id="saveName" type="text" placeholder="my-document" autocomplete="off" oninput="clearSaveMsg()">
           </div>
           <button class="save-btn" onclick="saveDocument()">Save</button>
         </div>
-
         <div class="overwrite-bar" id="overwriteBar">
           <span id="overwriteMsg"></span>
           <button class="ob-confirm" onclick="confirmOverwrite()">Overwrite</button>
           <button class="ob-cancel"  onclick="cancelOverwrite()">Cancel</button>
         </div>
-
         <div class="msg error"   id="saveError"></div>
         <div class="msg success" id="saveSuccess"></div>
-
-        <div class="card-list" id="savedList">
-          <div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>
+        <div class="card-list"  id="savedList">
+          <div class="empty-saved" style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>
         </div>
       </div>
     </div>
@@ -456,8 +262,9 @@ button:active { transform: translateY(1px); }
 
     <!-- ══ ACTIONS ══ -->
     <div class="btn-group">
-      <button id="previewBtn" onclick="runPreview()">↺ Refresh preview</button>
-      <button id="generatePdf" onclick="generate()">↓ Download PDF</button>
+      <button id="previewBtn"   onclick="runPreview()">↺ Refresh preview</button>
+      <button id="exportJsonBtn" onclick="exportJson()">⤓ Export as JSON template</button>
+      <button id="generatePdf"  onclick="generate()">↓ Download PDF</button>
     </div>
 
   </aside>
@@ -483,14 +290,12 @@ button:active { transform: translateY(1px); }
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   CONSTANTS & HELPERS
+   CONSTANTS
    ═══════════════════════════════════════════════════════════════ */
-const TEMPLATES_URL = 'https://static-conf.vercel.app/go/text-2-pdf';
-const STORAGE_PREFIX = 'docs:';
+const TEMPLATES_URL  = 'https://static-conf.vercel.app/go/text-2-pdf';
+const LS_PREFIX      = 'pdf_doc__';   /* localStorage key prefix */
 
-/* All form fields that templates and saved docs can populate.
-   DEFAULTS are applied first whenever switching a template,
-   so no leftover values bleed from a previous template.      */
+/* All mapped fields with their defaults — used for full-reset on template/doc switch */
 const FIELDS = {
   title:       { id: 'title',       default: '' },
   author:      { id: 'author',      default: '' },
@@ -503,38 +308,48 @@ const FIELDS = {
   fontSize:    { id: 'fontSize',    default: '12' },
 };
 
+/* ── helpers ── */
 function esc(s) {
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function readForm() {
   const out = {};
-  for (const [key, cfg] of Object.entries(FIELDS)) {
-    out[key] = document.getElementById(cfg.id).value;
-  }
+  for (const [key, cfg] of Object.entries(FIELDS)) out[key] = document.getElementById(cfg.id).value;
   return out;
 }
 
-/* Reset every mapped field to its default, then overlay tpl values */
+/* Resets every field to default, then overlays values from tpl */
 function populateForm(tpl) {
   for (const [key, cfg] of Object.entries(FIELDS)) {
     const el = document.getElementById(cfg.id);
     if (!el) continue;
-    el.value = (tpl[key] !== undefined && tpl[key] !== null)
-      ? tpl[key]
-      : cfg.default;
+    el.value = (tpl[key] !== undefined && tpl[key] !== null) ? tpl[key] : cfg.default;
   }
 }
 
-/* ── section collapse ── */
 function toggleSection(bodyId, btnId) {
   const body = document.getElementById(bodyId);
   const btn  = document.getElementById(btnId);
   const open = body.style.display !== 'none';
   body.style.display = open ? 'none' : 'flex';
   btn.textContent    = open ? 'show' : 'hide';
+}
+
+/* ── icon helpers ── */
+function docSvg() {
+  return `<svg width="14" height="16" viewBox="0 0 14 16" fill="none">
+    <rect x="1" y="1" width="9" height="12" rx="1.5" stroke="var(--ink3)" stroke-width="1.2"/>
+    <path d="M3 5h5M3 7.5h5M3 10h3" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round"/>
+    <path d="M10 1v4h4" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+function saveSvg() {
+  return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <rect x="1" y="1" width="12" height="12" rx="2" stroke="var(--ink3)" stroke-width="1.2"/>
+    <rect x="3" y="1" width="6" height="4" rx="0.5" stroke="var(--ink3)" stroke-width="1"/>
+    <rect x="3" y="7" width="8" height="5" rx="0.5" stroke="var(--ink3)" stroke-width="1"/>
+  </svg>`;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -556,9 +371,7 @@ async function loadTemplates() {
     const res = await fetch(TEMPLATES_URL);
     if (!res.ok) throw new Error(`Server returned ${res.status}.`);
     const data = await res.json();
-    const list = Array.isArray(data) ? data
-               : Array.isArray(data.templates) ? data.templates
-               : null;
+    const list = Array.isArray(data) ? data : Array.isArray(data.templates) ? data.templates : null;
     if (!list || list.length === 0) { setTplStatus('error', 'No templates returned.'); return; }
     setTplStatus(null);
     renderTplList(list);
@@ -589,10 +402,10 @@ function renderTplList(templates) {
 }
 
 async function applyRemoteTemplate(tpl, cardEl) {
-  document.querySelectorAll('#tplList .item-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
   cardEl.classList.add('active');
-  let data = tpl;
 
+  let data = tpl;
   if (tpl.url && Object.keys(tpl).length <= 3) {
     const metaEl = cardEl.querySelector('.item-meta') || cardEl.querySelector('.item-name');
     const orig = metaEl.textContent;
@@ -610,181 +423,162 @@ async function applyRemoteTemplate(tpl, cardEl) {
     metaEl.textContent = orig;
   }
 
-  /* Clear saved-doc active state — template and saved doc are mutually exclusive */
-  document.querySelectorAll('#savedList .item-card').forEach(c => c.classList.remove('active'));
-
-  populateForm(data);    /* resets ALL fields before applying template values */
+  populateForm(data);   /* full reset then overlay */
   runPreview();
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SAVED DOCUMENTS  (window.storage)
+   SAVED DOCUMENTS  (localStorage)
    ═══════════════════════════════════════════════════════════════ */
 let pendingOverwriteName = null;
 
-function clearSaveError() {
-  const nameEl = document.getElementById('saveName');
-  nameEl.classList.remove('is-error');
+/* ── localStorage shim — all access goes through these three fns ── */
+function lsSet(name, data)   { localStorage.setItem(LS_PREFIX + name, JSON.stringify(data)); }
+function lsGet(name)         { const v = localStorage.getItem(LS_PREFIX + name); return v ? JSON.parse(v) : null; }
+function lsDel(name)         { localStorage.removeItem(LS_PREFIX + name); }
+function lsKeys()            {
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(LS_PREFIX)) keys.push(k.slice(LS_PREFIX.length));
+  }
+  return keys;
+}
+
+function clearSaveMsg() {
+  document.getElementById('saveName').classList.remove('is-error');
   document.getElementById('saveError').classList.remove('visible');
-  document.getElementById('saveError').textContent = '';
   document.getElementById('saveSuccess').classList.remove('visible');
 }
+function showSaveError(msg)   { const el = document.getElementById('saveError');   document.getElementById('saveName').classList.add('is-error'); el.textContent = msg; el.classList.add('visible'); }
+function showSaveSuccess(msg) { const el = document.getElementById('saveSuccess'); el.textContent = msg; el.classList.add('visible'); setTimeout(() => el.classList.remove('visible'), 3000); }
 
-function showSaveError(msg) {
-  document.getElementById('saveName').classList.add('is-error');
-  const el = document.getElementById('saveError');
-  el.textContent = msg;
-  el.classList.add('visible');
-}
-
-function showSaveSuccess(msg) {
-  const el = document.getElementById('saveSuccess');
-  el.textContent = msg;
-  el.classList.add('visible');
-  setTimeout(() => el.classList.remove('visible'), 3000);
-}
-
-async function saveDocument() {
+function saveDocument() {
   cancelOverwrite();
-  clearSaveError();
-
+  clearSaveMsg();
   const rawName = document.getElementById('saveName').value.trim();
   if (!rawName) { showSaveError('Enter a name before saving.'); return; }
-
-  /* Sanitise: keep letters, digits, spaces, hyphens, underscores */
   const name = rawName.replace(/[^a-zA-Z0-9 _\-]/g, '').trim();
-  if (!name) { showSaveError('Name contains only invalid characters.'); return; }
+  if (!name)  { showSaveError('Name contains only invalid characters.'); return; }
 
-  const key = STORAGE_PREFIX + name;
-
-  /* Check for existing doc with same name */
-  try {
-    await window.storage.get(key);
-    /* If we reach here the key exists — ask to overwrite */
+  if (lsGet(name) !== null) {
+    /* name already exists — ask for confirmation */
     pendingOverwriteName = name;
-    const bar = document.getElementById('overwriteBar');
     document.getElementById('overwriteMsg').textContent = `"${name}" already exists.`;
-    bar.classList.add('visible');
+    document.getElementById('overwriteBar').classList.add('visible');
     return;
-  } catch {
-    /* Key doesn't exist — proceed to save */
   }
-
-  await persistDoc(name);
+  persistDoc(name);
 }
 
-async function confirmOverwrite() {
+function confirmOverwrite() {
   cancelOverwrite();
-  if (pendingOverwriteName) await persistDoc(pendingOverwriteName);
+  if (pendingOverwriteName) persistDoc(pendingOverwriteName);
   pendingOverwriteName = null;
 }
-
 function cancelOverwrite() {
   pendingOverwriteName = null;
   document.getElementById('overwriteBar').classList.remove('visible');
 }
 
-async function persistDoc(name) {
-  const key  = STORAGE_PREFIX + name;
-  const data = { ...readForm(), savedAt: new Date().toISOString() };
+function persistDoc(name) {
   try {
-    await window.storage.set(key, JSON.stringify(data));
+    lsSet(name, { ...readForm(), savedAt: new Date().toISOString() });
     showSaveSuccess(`"${name}" saved.`);
     document.getElementById('saveName').value = '';
-    await refreshSavedList();
+    refreshSavedList();
   } catch (err) {
+    /* localStorage can throw if storage quota is exceeded */
     showSaveError(`Save failed: ${err.message}`);
   }
 }
 
-async function refreshSavedList() {
+function refreshSavedList() {
   const container = document.getElementById('savedList');
   container.innerHTML = '';
-  try {
-    const { keys } = await window.storage.list(STORAGE_PREFIX);
-    if (!keys || keys.length === 0) {
-      container.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>';
-      return;
-    }
-    /* Sort newest first by loading savedAt */
-    const entries = await Promise.all(keys.map(async k => {
-      try {
-        const r = await window.storage.get(k);
-        const d = JSON.parse(r.value);
-        return { key: k, name: k.slice(STORAGE_PREFIX.length), data: d };
-      } catch { return null; }
-    }));
-    entries
-      .filter(Boolean)
-      .sort((a, b) => (b.data.savedAt || '').localeCompare(a.data.savedAt || ''))
-      .forEach(entry => renderSavedCard(entry, container));
-  } catch {
-    container.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">Storage unavailable.</div>';
+  const names = lsKeys();
+  if (names.length === 0) {
+    container.innerHTML = '<div class="empty-saved" style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>';
+    return;
   }
+  /* sort newest first */
+  const entries = names
+    .map(name => ({ name, data: lsGet(name) }))
+    .filter(e => e.data)
+    .sort((a, b) => (b.data.savedAt || '').localeCompare(a.data.savedAt || ''));
+
+  entries.forEach(({ name, data }) => renderSavedCard(name, data, container));
 }
 
-function renderSavedCard({ key, name, data }, container) {
-  const wrap = document.createElement('div');
-  wrap.className = 'item-card';
-  wrap.dataset.key = key;
-
+function renderSavedCard(name, data, container) {
   const dateStr = data.savedAt
     ? new Date(data.savedAt).toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' })
     : '';
-
+  const wrap = document.createElement('div');
+  wrap.className = 'item-card';
+  wrap.dataset.name = name;
   wrap.innerHTML = `
     <div class="item-icon">${saveSvg()}</div>
     <div class="item-body" style="cursor:pointer">
       <div class="item-name">${esc(name)}</div>
       ${dateStr ? `<div class="item-meta">${esc(dateStr)}</div>` : ''}
     </div>
-    <button class="icon-btn" title="Load document" data-action="load">↑</button>
-    <button class="icon-btn danger" title="Delete document" data-action="delete">✕</button>
+    <button class="icon-btn" title="Load" data-action="load">↑</button>
+    <button class="icon-btn danger" title="Delete" data-action="delete">✕</button>
   `;
-
-  wrap.querySelector('[data-action="load"]').addEventListener('click', () => loadSavedDoc(key, data, wrap));
-  wrap.querySelector('[data-action="delete"]').addEventListener('click', () => deleteSavedDoc(key, wrap));
-  wrap.querySelector('.item-body').addEventListener('click', () => loadSavedDoc(key, data, wrap));
-
+  wrap.querySelector('[data-action="load"]').addEventListener('click',   () => loadSavedDoc(name, data, wrap));
+  wrap.querySelector('[data-action="delete"]').addEventListener('click', () => deleteSavedDoc(name, wrap));
+  wrap.querySelector('.item-body').addEventListener('click',              () => loadSavedDoc(name, data, wrap));
   container.appendChild(wrap);
 }
 
-async function loadSavedDoc(key, data, cardEl) {
-  /* Deactivate all cards in both lists */
+function loadSavedDoc(name, data, cardEl) {
   document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
   cardEl.classList.add('active');
-
-  populateForm(data);   /* resets ALL fields before applying saved values */
+  populateForm(data);   /* full reset then overlay */
   runPreview();
 }
 
-async function deleteSavedDoc(key, cardEl) {
-  try {
-    await window.storage.delete(key);
-    cardEl.remove();
-    const container = document.getElementById('savedList');
-    if (!container.querySelector('.item-card')) {
-      container.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>';
-    }
-  } catch (err) {
-    showSaveError(`Delete failed: ${err.message}`);
+function deleteSavedDoc(name, cardEl) {
+  lsDel(name);
+  cardEl.remove();
+  if (!document.getElementById('savedList').querySelector('.item-card')) {
+    document.getElementById('savedList').innerHTML =
+      '<div class="empty-saved" style="font-size:12px;color:var(--ink3);font-family:var(--mono);padding:4px 2px">No saved documents yet.</div>';
   }
 }
 
-/* ── icon helpers ── */
-function docSvg() {
-  return `<svg width="14" height="16" viewBox="0 0 14 16" fill="none">
-    <rect x="1" y="1" width="9" height="12" rx="1.5" stroke="var(--ink3)" stroke-width="1.2"/>
-    <path d="M3 5h5M3 7.5h5M3 10h3" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round"/>
-    <path d="M10 1v4h4" stroke="var(--ink3)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
-}
-function saveSvg() {
-  return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <rect x="1" y="1" width="12" height="12" rx="2" stroke="var(--ink3)" stroke-width="1.2"/>
-    <rect x="3" y="1" width="6" height="4" rx="0.5" stroke="var(--ink3)" stroke-width="1"/>
-    <rect x="3" y="7" width="8" height="5" rx="0.5" stroke="var(--ink3)" stroke-width="1"/>
-  </svg>`;
+/* ═══════════════════════════════════════════════════════════════
+   JSON TEMPLATE EXPORT
+   ═══════════════════════════════════════════════════════════════ */
+function exportJson() {
+  const form = readForm();
+  /* Build a clean template object — name comes from title, or prompt user */
+  const tplName = form.title.trim() || 'template';
+  const template = {
+    name:        tplName,
+    title:       form.title,
+    author:      form.author,
+    subject:     form.subject,
+    keywords:    form.keywords,
+    content:     form.content,
+    leftMargin:  Number(form.leftMargin),
+    rightMargin: Number(form.rightMargin),
+    topMargin:   Number(form.topMargin),
+    fontSize:    Number(form.fontSize),
+  };
+  /* Remove empty string fields (keeps template files lean) */
+  for (const k of Object.keys(template)) {
+    if (template[k] === '' || template[k] === null) delete template[k];
+  }
+  const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const safe = tplName.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_').trim() || 'template';
+  a.href     = url;
+  a.download = safe + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -819,9 +613,11 @@ function buildDoc() {
   const subjectHeight     = subjectLines.length * subjectLineHeight;
   const extraGap          = subject ? 20 : 0;
   const topMargin         = topMarginInput + subjectHeight + extraGap;
-  const lines             = doc.splitTextToSize(text, usableWidth);
   const bottomMargin      = 10;
   const footerOffset      = 8;
+
+  /* ── split body text honouring usableWidth ── */
+  const rawLines = doc.splitTextToSize(text, usableWidth);
 
   function drawSubject() {
     if (!subject) return;
@@ -829,7 +625,11 @@ function buildDoc() {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     let y = topMarginInput + subjectLineHeight * 0.8;
-    for (const line of subjectLines) { doc.text(line, leftMargin, y); y += subjectLineHeight; }
+    for (const line of subjectLines) {
+      /* left-aligned, anchored at leftMargin, constrained to usableWidth */
+      doc.text(line, leftMargin, y, { align: 'left', maxWidth: usableWidth });
+      y += subjectLineHeight;
+    }
     doc.setFontSize(fontSize);
     doc.setFont('helvetica', 'normal');
   }
@@ -839,7 +639,7 @@ function buildDoc() {
     doc.setFontSize(fSize);
     doc.setTextColor(120, 120, 120);
     const y = pageHeight - footerOffset;
-    if (author) doc.text(author, leftMargin, y);
+    if (author) doc.text(author, leftMargin, y, { align: 'left', maxWidth: usableWidth - 20 });
     const lbl = `${n} / ${total}`;
     doc.text(lbl, pageWidth - rightMargin - doc.getTextWidth(lbl), y);
     doc.setTextColor(0, 0, 0);
@@ -859,34 +659,37 @@ function buildDoc() {
 
   function countPages() {
     let n = 1, i = 0, first = true;
-    while (i < lines.length) {
+    while (i < rawLines.length) {
       let y = first ? topMargin : topMarginInput;
-      while (i < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) { y += lineHeight; i++; }
-      if (i < lines.length) { n++; first = false; } else break;
+      while (i < rawLines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) { y += lineHeight; i++; }
+      if (i < rawLines.length) { n++; first = false; } else break;
     }
-    return lines.length === 0 ? 1 : n;
+    return rawLines.length === 0 ? 1 : n;
   }
 
   const total = countPages();
   let idx = 0, pageNum = 1, firstPage = true;
 
-  while (idx < lines.length) {
+  while (idx < rawLines.length) {
     if (firstPage) drawSubject();
     let y = firstPage ? topMargin : topMarginInput;
-    while (idx < lines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
-      doc.text(lines[idx], leftMargin, y); y += lineHeight; idx++;
+    while (idx < rawLines.length && (y + lineHeight) <= (pageHeight - bottomMargin - footerOffset)) {
+      /* left-aligned, maxWidth ensures no single line overruns the right margin */
+      doc.text(rawLines[idx], leftMargin, y, { align: 'left', maxWidth: usableWidth });
+      y += lineHeight;
+      idx++;
     }
     drawFooter(pageNum, total);
-    if (idx < lines.length) { doc.addPage(); pageNum++; firstPage = false; }
+    if (idx < rawLines.length) { doc.addPage(); pageNum++; firstPage = false; }
     else break;
   }
 
-  if (lines.length === 0) { drawSubject(); drawFooter(1, 1); }
+  if (rawLines.length === 0) { drawSubject(); drawFooter(1, 1); }
   return doc;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DOWNLOAD
+   DOWNLOAD PDF
    ═══════════════════════════════════════════════════════════════ */
 function generate() {
   const btn = document.getElementById('generatePdf');
@@ -936,8 +739,8 @@ function runPreview() {
         await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
         const wrap = document.createElement('div');
         wrap.className = 'pdf-page-wrap';
-        wrap.appendChild(canvas);
         scroll.appendChild(wrap);
+        wrap.appendChild(canvas);
       }
     }
     document.getElementById('liveDot').classList.add('live');
@@ -949,9 +752,9 @@ document.querySelectorAll('#title,#author,#subject,#keywords,#textInput,#leftMar
 
 /* ── Boot ── */
 (function () {
-  const s = document.createElement('script');
-  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-  s.onload = () => {
+  const s   = document.createElement('script');
+  s.src     = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  s.onload  = () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     runPreview();
